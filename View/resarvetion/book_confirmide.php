@@ -1,25 +1,30 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Details - Nova Travels</title>
+    <title>Reservation Confirmed</title>
+    <link rel="stylesheet" href="../assets/style.css">
     <style>
-        :root {
-            --cherry-red: #b22234;
-            --off-white: #fdf9f6;
-        }
-
         body {
-            background-color: var(--off-white);
+            background-color: white;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
 
-        /* Navbar CSS */
+        header {
+            background-color: #ffffff;
+            padding: 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
         .navbar {
             display: flex;
             align-items: center;
@@ -121,56 +126,67 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
 
-        /* Styling for content */
         .container {
-            padding: 2rem;
-            margin-top: 100px; /* Adjusted to prevent overlap with navbar */
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-top: 100px; /* Adjust for fixed navbar */
         }
 
-        .details-card {
-            border: 3px solid var(--cherry-red);
-            padding: 2rem;
+        .confirmation-card {
+            border: 3px solid #990000;
+            padding: 40px;
             border-radius: 10px;
-            background-color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background-color: #ffe6e6;
+            text-align: center;
         }
 
-        .details-card h1 {
-            color: var(--cherry-red);
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
+        .confirmation-card h1 {
+            color: #990000;
+            font-size: 32px;
+            margin-bottom: 20px;
         }
 
-        .details-card p {
-            font-size: 1.1rem;
+        .confirmation-card p {
+            font-size: 18px;
             margin: 10px 0;
-            font-weight: bold;
         }
 
-        .btn-back, .btn-book {
-            margin-top: 20px;
-            display: inline-block;
-            background-color: var(--cherry-red);
+        .confirmation-card .details {
+            font-weight: bold;
+            color: #990000;
+        }
+
+        .confirmation-card .flight-info {
+            margin-top: 30px;
+            border-top: 2px solid #990000;
+            padding-top: 20px;
+        }
+
+        .confirmation-card .flight-info p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .btn-back {
+            background-color: #990000;
             color: white;
             padding: 12px 20px;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 0.95rem;
+            margin-top: 20px;
+            display: inline-block;
         }
 
-        .btn-back:hover, .btn-book:hover {
-            background-color: #a01d1d;
-        }
-
-        .btn-book {
-            margin-left: 20px;
+        .btn-back:hover {
+            background-color: #660000;
         }
     </style>
 </head>
 <body>
 
-<!-- Navbar Section -->
+<!-- New Navbar -->
 <header>
     <nav class="navbar">
         <img src="logo.png" alt="Logo" class="logo">
@@ -178,10 +194,10 @@
             <input type="text" placeholder="Search...">
         </div>
         <div class="nav-links">
-            <a href="index.html" class="nav-link">Home</a>
-            <a href="index.html#booking" class="nav-link">Book a Flight</a>
+            <a href="homepage.html" class="nav-link">Home</a>
+            <a href="reservation.html" class="nav-link">Book a Flight</a>
             <a href="reservations.html" class="nav-link">Reservations</a>
-            <a href="login.php" class="nav-link">Log In</a>
+            <a href="logout.html" class="nav-link">Log Out</a>
         </div>
         <div class="auth-buttons">
             <button class="login-btn">Login</button>
@@ -190,25 +206,34 @@
     </nav>
 </header>
 
-<!-- Main Content Section -->
+<!-- Main Content -->
 <div class="container">
-    <div class="details-card">
-        <h1>Flight PLT123 - Pluto Airlines</h1>
-        <p><strong>Flight Number:</strong> PLT123</p>
-        <p><strong>Company:</strong> Pluto Airlines</p>
-        <p><strong>Destination:</strong> Mars International Airport</p>
-        <p><strong>Departure Time:</strong> 2025-05-01 10:00</p>
-        <p><strong>Arrival Time:</strong> 2025-05-01 14:00</p>
-        <p><strong>Flight Type:</strong> Direct</p>
-        <p><strong>Aircraft:</strong> Space Cruiser 3000</p>
-    </div>
+    <div class="confirmation-card">
+        <h1>Reservation Confirmed</h1>
 
-    <!-- Buttons -->
-    <a href="index.html#booking" class="btn-back">Back to Flights</a>
-    <a href="reservation.html" class="btn-book">Book This Flight</a>
+        <p>Thank you for booking with us!</p>
+        <p>Your reservation has been successfully processed.</p>
+
+        <!-- Reservation Summary -->
+        <div class="details">
+            <p><strong>Passenger:</strong> John Doe</p>
+            <p><strong>Email:</strong> johndoe@email.com</p>
+            <p><strong>Phone Number:</strong> +123 456 7890</p>
+        </div>
+
+        <!-- Flight Information -->
+        <div class="flight-info">
+            <p><strong>Flight Number:</strong> PLT123</p>
+            <p><strong>Destination:</strong> Mars International Airport</p>
+            <p><strong>Departure Date:</strong> 2025-05-01 10:00</p>
+            <p><strong>Class:</strong> Business</p>
+            <p><strong>Payment Method:</strong> Visa</p>
+        </div>
+
+        <!-- Back Button -->
+        <a href="book-a-flight.html" class="btn-back">Back to Booking</a>
+    </div>
 </div>
 
 </body>
 </html>
-
-

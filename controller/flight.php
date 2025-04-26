@@ -28,7 +28,7 @@ if ($action == 'List') {
     $to = $_GET['to'];
     $date = $_GET['departure_date'];
     $tripType = $_GET['trip_type'] ?? 'oneway';
-
+    $class = $_GET['class'] ?? 'Economy';
     // حساب عدد الركاب من الحقول المختلفة
     $adults = isset($_GET['adults']) ? (int)$_GET['adults'] : 1;
     $children = isset($_GET['children']) ? (int)$_GET['children'] : 0;

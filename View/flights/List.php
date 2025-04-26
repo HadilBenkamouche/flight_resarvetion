@@ -1,60 +1,230 @@
+
+
+
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>قائمة الرحلات</title>
-  <style>
-    body {
-      font-family: 'Tahoma', sans-serif;
-      background-color: #f8f9fa;
-      margin: 0;
-      padding: 20px;
-    }
-    h2 {
-      color: #007BFF;
-      text-align: center;
-    }
-    .flight-card {
-      background-color: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-    .flight-card p {
-      margin: 8px 0;
-    }
-    .btn {
-      display: inline-block;
-      padding: 10px 15px;
-      background-color: #28a745;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-    }
-    .btn:hover {
-      background-color: #218838;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flights - Nova Travels</title>
+    <style>
+        :root {
+            --cherry-red: #b22234; /* Same red */
+            --off-white: #ffff;  /* Background color */
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--off-white);
+        }
+
+        /* Navbar */
+        header {
+            background-color: var(--cherry-red);
+            padding: 0.8rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 40px;
+            background-color: #ffffff;
+            height: 80px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            padding-top: 15px;
+            width: 170px; /* العرض */
+            height: auto; /* يجعل الارتفاع يتناسب تلقائياً */
+            margin-right: 140px;  
+            margin-bottom: 1mm; /* إضافة المسافة بين الشعار و شريط البحث */
+        }
+
+        .search-bar input {
+            margin-left: 1px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 1.4px solid #B22234;
+            width: 300px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #B22234;
+            box-shadow: 0 0 5px #7d010b;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-left: 40px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #B22234;
+            font-weight: bold;
+            font-size: 16px;
+            position: relative;
+            padding-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background-color: #B22234;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: #7d010b;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+            margin-left: auto;
+            padding-right: 20px;
+        }
+
+        .login-btn,
+        .signup-btn {
+            background-color: #B22234;
+            color: #ffffff;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-btn:hover,
+        .signup-btn:hover {
+            background-color: #7d010b;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Main content */
+        main {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        /* Flight List */
+        .flight-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .flight-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            padding: 20px;
+            width: 250px;
+            text-align: left;
+            transition: transform 0.3s ease;
+        }
+
+        .flight-card:hover {
+            transform: translateY(-10px);
+        }
+
+        /* Button Styles for "View Details" */
+        .btn-details {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--cherry-red);
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-details:hover {
+            background-color: #a01d1d; /* darker red when hovering */
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <nav class="navbar">
+            <img src="logo.png" alt="Logo" class="logo">
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="reservation.html" class="nav-link">Book a Flight</a>
+                <a href="reservations.html" class="nav-link">Reservations</a>
+                <a href="login.html" class="nav-link">Log In</a>
+            </div>
+            <div class="auth-buttons">
+                <button class="login-btn">Login</button>
+                <button class="signup-btn">Sign Up</button>
+            </div>
+        </nav>
+    </header>
 
-<h2>الرحلات المتاحة</h2>
+    <main>
+        <h1>Available Flights</h1>
+        <div class="flight-list">
+            <!-- Flight 1 -->
+            <div class="flight-card">
+                <h3>Flight Number: PL123</h3>
+                <p>Destination: Pluto</p>
+                <p>Departure: 2025-05-01 08:00</p>
+                <p>Arrival: 2025-05-01 15:00</p>
+                <a href="flight-details.html" class="btn-details">View Details</a>
+            </div>
 
-<?php if (count($flights) > 0): ?>
-  <?php foreach ($flights as $flight): ?>
-    <div class="flight-card">
-      <p><strong>رقم الرحلة:</strong> <?= $flight['flight_number'] ?></p>
-      <p><strong>شركة الطيران:</strong> <?= $flight['company_code'] ?></p>
-      <p><strong>الإقلاع:</strong> <?= $flight['departure_time'] ?></p>
-      <p><strong>الوصول:</strong> <?= $flight['arrival_time'] ?></p>
-      <a class="btn" href="../../controllers/flight.php?action=details&flight_number=<?= $flight['flight_number'] ?>">عرض التفاصيل</a>
-    </div>
-  <?php endforeach; ?>
-<?php else: ?>
-  <p style="text-align:center; color: red;">لا توجد رحلات حالياً.</p>
-<?php endif; ?>
+            <!-- Flight 2 -->
+            <div class="flight-card">
+                <h3>Flight Number: PL456</h3>
+                <p>Destination: Mars</p>
+                <p>Departure: 2025-06-01 10:00</p>
+                <p>Arrival: 2025-06-01 18:00</p>
+                <a href="flight-details.html" class="btn-details">View Details</a>
+            </div>
 
+            <!-- Add more flights as needed -->
+        </div>
+    </main>
 </body>
 </html>
 
