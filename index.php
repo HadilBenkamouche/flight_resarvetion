@@ -572,27 +572,12 @@
             <label>To</label>
             <input type="text" name="to" placeholder="City or Airport" required>
         </div>
-
-        <div class="form-control">
-            <label>Class</label>
-            <select name="flight_class" required>
-                <option value="">Select</option>
-                <option value="economy">Economy</option>
-                <option value="business">Business</option>
-                <option value="first">First Class</option>
-            </select>
-        </div>
     </div>
 
     <div class="form-group">
         <div class="form-control">
             <label>Departure Date</label>
             <input type="date" name="departure_date" required>
-        </div>
-
-        <div class="form-control">
-            <label>Return Date</label>
-            <input type="date" name="return_date"> <!-- اختياري -->
         </div>
 
         <div class="form-control">
@@ -616,6 +601,7 @@
 
     <button type="submit" class="search-button">Search Flights</button>
 </form>
+
 
   <!-- OFFERS SECTION -->
 <div class="offers-section">

@@ -192,16 +192,23 @@
 
 <!-- Main Content Section -->
 <div class="container">
-    <div class="details-card">
-        <h1>Flight PLT123 - Pluto Airlines</h1>
-        <p><strong>Flight Number:</strong> PLT123</p>
-        <p><strong>Company:</strong> Pluto Airlines</p>
-        <p><strong>Destination:</strong> Mars International Airport</p>
-        <p><strong>Departure Time:</strong> 2025-05-01 10:00</p>
-        <p><strong>Arrival Time:</strong> 2025-05-01 14:00</p>
-        <p><strong>Flight Type:</strong> Direct</p>
-        <p><strong>Aircraft:</strong> Space Cruiser 3000</p>
-    </div>
+    <?php if (!empty($flightDetails)): ?>
+        <div class="details-card">
+            <h1>Flight <?php echo htmlspecialchars($flightDetails['flight_number']); ?> - <?php echo htmlspecialchars($flightDetails['company_name']); ?></h1>
+
+            <p><strong>Flight Number:</strong> <?php echo htmlspecialchars($flightDetails['flight_number']); ?></p>
+            <p><strong>Company:</strong> <?php echo htmlspecialchars($flightDetails['company_name']); ?></p>
+            <p><strong>Destination:</strong> <?php echo htmlspecialchars($flightDetails['destination_airport_name']); ?></p>
+            <p><strong>Departure Time:</strong> <?php echo htmlspecialchars($flightDetails['departure_time']); ?></p>
+            <p><strong>Arrival Time:</strong> <?php echo htmlspecialchars($flightDetails['arrival_time']); ?></p>
+            <p><strong>Flight Type:</strong> <?php echo htmlspecialchars($flightDetails['flight_type']); ?></p>
+            <p><strong>Aircraft:</strong> <?php echo htmlspecialchars($flightDetails['aircraft_model']); ?></p>
+        </div>
+    <?php else: ?>
+        <p>No flight details found.</p>
+    <?php endif; ?>
+</div>
+
 
     <!-- Buttons -->
     <a href="index.html#booking" class="btn-back">Back to Flights</a>

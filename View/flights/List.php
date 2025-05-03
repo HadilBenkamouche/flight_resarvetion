@@ -202,28 +202,28 @@
     </header>
 
     <main>
-        <h1>Available Flights</h1>
-        <div class="flight-list">
-            <!-- Flight 1 -->
-            <div class="flight-card">
-                <h3>Flight Number: PL123</h3>
-                <p>Destination: Pluto</p>
-                <p>Departure: 2025-05-01 08:00</p>
-                <p>Arrival: 2025-05-01 15:00</p>
-                <a href="flight-details.html" class="btn-details">View Details</a>
-            </div>
+    <h1>Available Flights</h1>
 
-            <!-- Flight 2 -->
+    <div class="flight-list">
+    <?php if (!empty($flights)): ?>
+        <?php foreach ($flights as $flight): ?>
             <div class="flight-card">
-                <h3>Flight Number: PL456</h3>
-                <p>Destination: Mars</p>
-                <p>Departure: 2025-06-01 10:00</p>
-                <p>Arrival: 2025-06-01 18:00</p>
-                <a href="flight-details.html" class="btn-details">View Details</a>
+                <h3>Flight Number: <?php echo htmlspecialchars($flight['flight_number']); ?></h3>
+                <p>From: <?php echo htmlspecialchars($flight['departure_city']); ?></p>
+                <p>To: <?php echo htmlspecialchars($flight['arrival_city']); ?></p>
+                <p>Departure: <?php echo htmlspecialchars($flight['departure_time']); ?></p>
+                <p>Arrival: <?php echo htmlspecialchars($flight['arrival_time']); ?></p>
+                <a href="flight.php?action=details&flight_number=<?php echo urlencode($flight['flight_number']); ?>" class="btn-details">View Details</a>
+
             </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>No flights found matching your criteria.</p>
+    <?php endif; ?>
+</div>
 
             <!-- Add more flights as needed -->
-        </div>
+            </div> 
     </main>
 </body>
 </html>

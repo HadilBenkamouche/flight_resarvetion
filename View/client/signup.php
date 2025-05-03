@@ -140,7 +140,8 @@
   <img src="Logo.png" alt="Logo" class="logo">
 
   <form action="../../controller/client.php" method="POST" class="form">
-    <div class="input-container">
+  <input type="hidden" name="action" value="signup">
+  <div class="input-container">
       <input type="text" name="username" required />
       <label>Username</label>
     </div>

@@ -162,28 +162,33 @@
 
   <div class="container">
     <img src="Logo.png" alt="Logo" class="logo">
+    <form action="../../controller/client.php" method="POST" class="form">
+  <input type="hidden" name="action" value="login">
 
-    <div class="form">
-      <div class="input-container">
-        <input type="text" required />
-        <label>Username</label>
-      </div>
-
-      <div class="input-container">
-        <input type="password" required />
-        <label>Password</label>
-      </div>
-
-      <a href="#" class="forgot">Forget password?</a>
-      <button class="login-btn">Login</button>
-
-      <div class="signup">
-        Need an account? <a href="#" class="signup-link">SIGN UP</a>
-      </div>
-    </div>
-
-    <img src="loginpage.png" alt="Bottom Image" class="bottom-left-img">
+  <div class="input-container">
+    <input type="text" name="email" required />
+    <label>Email</label>
   </div>
 
+  <div class="input-container">
+    <input type="password" name="password" required />
+    <label>Password</label>
+  </div>
+
+  <a href="#" class="forgot">Forget password?</a>
+  <button type="submit" class="login-btn">Login</button>
+
+  <div class="signup">
+    Need an account? <a href="#" class="signup-link">SIGN UP</a>
+  </div>
+</form>
+
+      
+    </div>
+    
+    <img src="loginpage.png" alt="Bottom Image" class="bottom-left-img">
+    
+  </div>
+  
 </body>
 </html>
