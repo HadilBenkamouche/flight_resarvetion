@@ -21,12 +21,13 @@
       padding: 30px 20px 20px 20px;
       text-align: center;
       position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       height: 538px;
-      overflow: hidden;
-      border: 5px solid #ffffff;
+      overflow: visible;
+       border: 5px solid #ffffff;
     }
 
     .logo {
@@ -149,13 +150,16 @@
     }
 
     .bottom-left-img {
-      position: absolute;
-      bottom: -40px;
-      left: 0;
-      width: 100%;
-      height: auto;
-      z-index: 1;
-    }
+  position: absolute;
+  bottom: 20px;
+  left: 5px;
+  width: 500px;
+  height: auto;
+  z-index: 0;
+  pointer-events: none;
+}
+
+
   </style>
 </head>
 <body>
@@ -182,11 +186,11 @@
     Need an account? <a href="#" class="signup-link">SIGN UP</a>
   </div>
 </form>
-
+<img src="loginpage.png" alt="Bottom Image" class="bottom-left-img">
       
     </div>
     
-    <img src="loginpage.png" alt="Bottom Image" class="bottom-left-img">
+    
     
   </div>
   

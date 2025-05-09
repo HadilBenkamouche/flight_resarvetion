@@ -21,6 +21,7 @@
       padding: 30px 20px 20px 20px;
       text-align: center;
       position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -124,14 +125,16 @@
       text-decoration: underline;
     }
 
+    
     .bottom-left-img {
-      position: absolute;
-      bottom: -40px;
-      left: 0;
-      width: 100%;
-      height: auto;
-      z-index: 1;
-    }
+  position: absolute;
+  bottom: 20px;
+  left: 0px;
+  width: 500px;
+  height: auto;
+  z-index: 0;
+  pointer-events: none;
+}
   </style>
 </head>
 <body>
@@ -162,10 +165,11 @@
       Already have an account? <a href="login.php" class="login-link">LOGIN</a>
     </div>
     </form>
-</div>
+    
+  </div>
+  <img src="loginpage.png" alt="Bottom Image" class="bottom-left-img">
 
-
-    <img src="loginpage.png" alt="Bottom Image" class="bottom-left-img">
+    
   </div>
   
 </body>

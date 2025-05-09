@@ -56,31 +56,50 @@ class Flight {
         // استرجاع النتائج
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
     public function getFlightByNumber($flightNumber) {
         $sql = "
-        SELECT f.flight_number,
-               arr_airport.airport_name AS destination_airport_name,  -- اسم المطار في الوجهة
-               f.departure_time,
-               f.arrival_time,
-               f.flight_type,
-               c.name AS company_name,
-               a.model AS aircraft_model
-        FROM Flight f
-        JOIN Company c ON f.company_code = c.company_code
-        JOIN Aircraft a ON f.aircraft_code = a.aircraft_code
-        JOIN FlightRoute fr ON f.flight_number = fr.flight_number
-        JOIN Airport dep_airport ON fr.departure_airport = dep_airport.iata_code
-        JOIN Airport arr_airport ON fr.arrival_airport = arr_airport.iata_code  -- ربط المطار في الوجهة
-        WHERE f.flight_number = ?
-        LIMIT 1
-    ";
-    
-    
+            SELECT 
+                f.flight_number,
+                arr_airport.airport_name AS destination_airport_name,
+                f.departure_time,
+                f.arrival_time,
+                f.flight_type,
+                c.name AS company_name,
+                a.model AS aircraft_model,
+                a.first_seats,
+                a.business_seats,
+                a.economy_seats,
+                COUNT(CASE WHEN r.class_name= 'first' THEN 1 END) AS reserved_first,
+                COUNT(CASE WHEN r.class_name = 'business' THEN 1 END) AS reserved_business,
+                COUNT(CASE WHEN r.class_name = 'economy' THEN 1 END) AS reserved_economy
+            FROM Flight f
+            JOIN Company c ON f.company_code = c.company_code
+            JOIN Aircraft a ON f.aircraft_code = a.aircraft_code
+            JOIN FlightRoute fr ON f.flight_number = fr.flight_number
+            JOIN Airport arr_airport ON fr.arrival_airport = arr_airport.iata_code
+            LEFT JOIN Reservation r ON f.flight_number = r.flight_number
+            LEFT JOIN includes i ON r.reservation_number = i.reservation_number
+            WHERE f.flight_number = ?
+            GROUP BY f.flight_number
+            LIMIT 1
+        ";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$flightNumber]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $flight = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+    
+        if ($flight) {
+            // حساب المقاعد المتبقية ديناميكياً
+            $flight['remaining_first_seats'] = $flight['first_seats'] - $flight['reserved_first'];
+            $flight['remaining_business_seats'] = $flight['business_seats'] - $flight['reserved_business'];
+            $flight['remaining_economy_seats'] = $flight['economy_seats'] - $flight['reserved_economy'];
+        }
+    
+        return $flight;
     }
+    
+    
+    
      
     public function addFlight($flightNumber, $destination, $departure, $arrival, $flightType) {
         $sql = "INSERT INTO flight (flight_number, destination, departure_time, arrival_time, flight_type)

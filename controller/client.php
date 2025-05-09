@@ -1,4 +1,5 @@
-<?php ini_set('display_errors', 1);
+<?php 
+ini_set('display_errors', 1);
 error_reporting(E_ALL);
 session_start();
 require_once '../Model/client.php';
@@ -14,10 +15,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
             $password = $_POST['password'];
 
+            // تقسيم اسم المستخدم إلى أول وآخر
             $nameParts = explode(" ", $username, 2);
             $firstName = $nameParts[0];
             $lastName = isset($nameParts[1]) ? $nameParts[1] : '';
 
+            // التحقق من كلمة المرور (8 أحرف مختلطة بين الأحرف والأرقام والرموز)
+            if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) {
+                // إذا كانت كلمة المرور غير صالحة، عرض رسالة خطأ
+                echo "كلمة المرور غير صالحة، يجب أن تحتوي على 8 أحرف مختلطة بين الأحرف والأرقام والرموز.";
+                exit;
+            }
+
+            // استدعاء دالة التسجيل
             $result = $client->register($firstName, $lastName, $email, $password);
 
             if ($result) {
@@ -29,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "يرجى ملء جميع الحقول.";
         }
     }
-    
-} 
+}
+
 
 
     // عملية تسجيل الدخول (تم تغييرها إلى if منفصلة)

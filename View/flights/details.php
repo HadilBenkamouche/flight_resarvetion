@@ -9,7 +9,7 @@
     <style>
         :root {
             --cherry-red: #b22234;
-            --off-white: #fdf9f6;
+            --off-white: #ffffff;
         }
 
         body {
@@ -178,10 +178,10 @@
             <input type="text" placeholder="Search...">
         </div>
         <div class="nav-links">
-            <a href="index.html" class="nav-link">Home</a>
+            <a href="localhost/flight_resarvetion/" class="nav-link">Home</a>
             <a href="index.html#booking" class="nav-link">Book a Flight</a>
             <a href="reservations.html" class="nav-link">Reservations</a>
-            <a href="login.php" class="nav-link">Log In</a>
+            
         </div>
         <div class="auth-buttons">
             <button class="login-btn">Login</button>
@@ -189,7 +189,7 @@
         </div>
     </nav>
 </header>
-
+<!-- Main Content Section -->
 <!-- Main Content Section -->
 <div class="container">
     <?php if (!empty($flightDetails)): ?>
@@ -203,19 +203,27 @@
             <p><strong>Arrival Time:</strong> <?php echo htmlspecialchars($flightDetails['arrival_time']); ?></p>
             <p><strong>Flight Type:</strong> <?php echo htmlspecialchars($flightDetails['flight_type']); ?></p>
             <p><strong>Aircraft:</strong> <?php echo htmlspecialchars($flightDetails['aircraft_model']); ?></p>
-        </div>
-    <?php else: ?>
-        <p>No flight details found.</p>
-    <?php endif; ?>
-</div>
 
+            <!-- عدد المقاعد المتبقية لكل كلاس -->
+            <p><strong>First Class Seats Left:</strong> <?php echo $flightDetails['remaining_first_seats']; ?></p>
+            <p><strong>Business Class Seats Left:</strong> <?php echo $flightDetails['remaining_business_seats']; ?></p>
+            <p><strong>Economy Class Seats Left:</strong> <?php echo $flightDetails['remaining_economy_seats']; ?></p>
+        </div> <!-- إغلاق details-card -->
+    <?php endif; ?>
 
     <!-- Buttons -->
-    <a href="index.html#booking" class="btn-back">Back to Flights</a>
-    <a href="reservation.html" class="btn-book">Book This Flight</a>
-</div>
+    <a href="details.php" class="btn-back">Back to Flights</a>
+
+    <a href="/flight_resarvetion/View/resarvetion/booking.php?flight_number=<?php echo urlencode($flightNumber); ?>" class="btn-book">Book This Flight</a>
+
+</div> <!-- إغلاق container -->
 
 </body>
 </html>
+
+
+
+
+   
 
 

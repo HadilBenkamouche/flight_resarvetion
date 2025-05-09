@@ -1,4 +1,11 @@
 
+<?php
+// تأكد من بدء الجلسة بشكل آمن
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +24,6 @@
             background-color: var(--off-white);
         }
 
-        /* New Navbar Styles */
         .navbar {
             display: flex;
             align-items: center;
@@ -35,10 +41,10 @@
 
         .logo {
             padding-top: 15px;
-            width: 170px; /* العرض */
-            height: auto; /* يجعل الارتفاع يتناسب تلقائياً */
+            width: 170px;
+            height: auto;
             margin-right: 140px;  
-            margin-bottom: 1mm; /* إضافة المسافة بين الشعار و شريط البحث */
+            margin-bottom: 1mm;
         }
 
         .search-bar input {
@@ -119,11 +125,10 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
 
-        /* Form Styling */
         .container {
             padding: 30px;
             max-width: 600px;
-            margin: 120px auto; /* Adjusted to provide space for the fixed navbar */
+            margin: 120px auto;
         }
 
         .form-card {
@@ -148,12 +153,12 @@
 
         .form-card input, .form-card select {
             width: 100%;
-            padding: 0.8rem; /* Same padding as the button */
+            padding: 0.8rem;
             margin-bottom: 1.2rem;
             border: 1px solid #ccc;
             border-radius: 8px;
             font-size: 1rem;
-            box-sizing: border-box; /* Ensures consistent sizing */
+            box-sizing: border-box;
             transition: 0.3s ease;
         }
 
@@ -194,17 +199,37 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             font-size: 1rem;
-            box-sizing: border-box; /* Ensures button's sizing matches the inputs */
+            box-sizing: border-box;
         }
 
         .btn-book:hover {
             background-color: #a01d1d;
         }
+
+        .btn-add {
+            background-color: #ccc;
+            color: #333;
+            padding: 0.8rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-add:hover {
+            background-color: #bbb;
+        }
     </style>
 </head>
 <body>
 
-<!-- New Navbar -->
+<!-- Navbar -->
 <header>
     <nav class="navbar">
         <img src="logo.png" alt="Logo" class="logo">
@@ -224,57 +249,101 @@
     </nav>
 </header>
 
-<!-- Main Content -->
+<!-- Form Content -->
+<!-- Form Content -->
 <div class="container">
     <div class="form-card">
         <h1>Book a Flight</h1>
-        <form action="reservation-confirmed.html" method="POST">
+        <form id="reservation-form" action="../../controller/resarvetion.php" method="POST">
+        <input type="hidden" name="action" value="addReservation">
 
-            <!-- User Information -->
-            <label for="first-name">First Name:</label>
-            <input type="text" id="first-name" name="first-name" required>
+            <div id="passenger-forms">
+                <!-- نموذج مسافر واحد -->
+                <div class="passenger-form">
+                    <h3>Passenger 1</h3>
+                    <label for="first-name">First Name:</label>
+                    <input type="text" name="first_name[]" required>
 
-            <label for="last-name">Last Name:</label>
-            <input type="text" id="last-name" name="last-name" required>
+                    <label for="last-name">Last Name:</label>
+                    <input type="text" name="last_name[]" required>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+                    <label for="email">Email:</label>
+                    <input type="email" name="email[]" required>
 
-            <label for="phone">Phone Number:</label>
-            <input type="tel" id="phone" name="phone" required>
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" name="phone[]" required>
+                </div>
+            </div>
 
-            <!-- Flight Information -->
+            <!-- Flight Info -->
             <label for="flight-number">Flight Number:</label>
-            <input type="text" id="flight-number" name="flight-number" value="PLT123" readonly>
+            <input type="text" id="flight-number" name="flight_number" value="<?php echo isset($_GET['flight_number']) ? htmlspecialchars($_GET['flight_number']) : ''; ?>" readonly>
+
 
             <label for="flight-class">Class:</label>
-            <select id="flight-class" name="flight-class" required>
+            <select id="flight-class" name="class_name" required>
+
                 <option value="Economy">Economy</option>
                 <option value="Business">Business</option>
                 <option value="First Class">First Class</option>
             </select>
 
-            <!-- Payment Method -->
+            <!-- Payment Method (اختياري مسبقاً) -->
             <div class="payment-methods">
                 <div>
-                    <input type="radio" id="visa" name="payment-method" value="Visa" required>
+                    <input type="radio" id="visa" name="payment_method" value="Visa" required>
                     <label for="visa">Visa</label>
                 </div>
                 <div>
-                    <input type="radio" id="mastercard" name="payment-method" value="Mastercard">
+                    <input type="radio" id="mastercard" name="payment_method" value="Mastercard">
                     <label for="mastercard">Mastercard</label>
                 </div>
                 <div>
-                    <input type="radio" id="post" name="payment-method" value="Algérie Poste">
+                    <input type="radio" id="post" name="payment_method" value="Algérie Poste">
                     <label for="post">Algérie Poste</label>
                 </div>
             </div>
 
-            <!-- Submit Button -->
+            <!-- Buttons -->
+            <button type="button" class="btn-add" onclick="addPassengerForm()">Add Reservation</button>
             <button type="submit" class="btn-book">Confirm Reservation</button>
+
         </form>
     </div>
 </div>
+
+<!-- JavaScript لإضافة نماذج جديدة -->
+<script>
+    let passengerCount = 1;
+
+    function addPassengerForm() {
+        passengerCount++;
+        const container = document.getElementById('passenger-forms');
+
+        const newForm = document.createElement('div');
+        newForm.classList.add('passenger-form');
+        newForm.innerHTML = `
+            <h3>Passenger ${passengerCount}</h3>
+            <label>First Name:</label>
+            <input type="text" name="first_name[]" required>
+
+            <label>Last Name:</label>
+            <input type="text" name="last_name[]" required>
+
+            <label>Email:</label>
+            <input type="email" name="email[]" required>
+
+            <label>Phone Number:</label>
+            <input type="tel" name="phone[]" required>
+        `;
+
+        container.appendChild(newForm);
+    }
+</script>
+
+
+    
+
 
 </body>
 </html>
