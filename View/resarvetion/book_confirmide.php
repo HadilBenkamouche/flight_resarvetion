@@ -207,33 +207,29 @@
 </header>
 
 <!-- Main Content -->
-<div class="container">
-    <div class="confirmation-card">
-        <h1>Reservation Confirmed</h1>
+<div class="confirmation-card">
+    <h1>Reservation Confirmed</h1>
+    <p>Thank you for booking with us!</p>
+    <p>Your reservation has been successfully processed.</p>
 
-        <p>Thank you for booking with us!</p>
-        <p>Your reservation has been successfully processed.</p>
+    <div class="details">
+        <?php foreach ($passengers as $passenger): ?>
+            <p><strong>Passenger:</strong> <?= htmlspecialchars($passenger['first_name'] . ' ' . $passenger['last_name']) ?></p>
+            <p><strong>Email:</strong> <?= htmlspecialchars($passenger['email']) ?></p>
+            <p><strong>Phone Number:</strong> <?= htmlspecialchars($passenger['phone']) ?></p>
+            <hr>
+        <?php endforeach; ?>
+    </div>
 
-        <!-- Reservation Summary -->
-        <div class="details">
-            <p><strong>Passenger:</strong> John Doe</p>
-            <p><strong>Email:</strong> johndoe@email.com</p>
-            <p><strong>Phone Number:</strong> +123 456 7890</p>
-        </div>
-
-        <!-- Flight Information -->
-        <div class="flight-info">
-            <p><strong>Flight Number:</strong> PLT123</p>
-            <p><strong>Destination:</strong> Mars International Airport</p>
-            <p><strong>Departure Date:</strong> 2025-05-01 10:00</p>
-            <p><strong>Class:</strong> Business</p>
-            <p><strong>Payment Method:</strong> Visa</p>
-        </div>
-
-        <!-- Back Button -->
-        <a href="book-a-flight.html" class="btn-back">Back to Booking</a>
+    <div class="flight-info">
+        <p><strong>Flight Number:</strong> <?= htmlspecialchars($reservation['flight_number']) ?></p>
+        <p><strong>Destination:</strong> <?= htmlspecialchars($reservation['arrival_airport']) ?></p>
+        <p><strong>Departure Date:</strong> <?= htmlspecialchars($reservation['departure_date']) ?></p>
+        <p><strong>Class:</strong> <?= htmlspecialchars($reservation['class_name']) ?></p>
+        <p><strong>Payment Method:</strong> Mastercard</p> <!-- ← غيّرها إذا كنت تخزن نوع البطاقة -->
     </div>
 </div>
+
 
 </body>
 </html>

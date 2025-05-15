@@ -2,7 +2,7 @@
 
 require_once '../confi/db.php';
 require_once '../Model/reservtion.php';
-
+require_once '../Model/flight.php';
 // بدء الجلسة بشكل آمن
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -15,29 +15,53 @@ if (!isset($_SESSION['client_id'])) {
 }
 
 $reservationModel = new Reservation($pdo);
+$flightModel = new Flight($pdo);
 
-// معالجة طلبات POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     
-    // إضافة حجز جديد
     if ($_POST['action'] === 'addReservation') {
-        $reservationNumber = 'RES' . uniqid();
-        $reservationDate = date('Y-m-d H:i:s');
+        
+        $flightNumber = $_POST['flight_number'];
+        $class = $_POST['class_name'];
+        $passengerCount = count($_POST['first_name']);
 
+        // جلب معلومات الرحلة
+        $flight = $flightModel->getFlightByNumber($flightNumber);
+
+        // تحديد السعر حسب الكلاس
+        switch ($class) {
+            case 'Economy':
+                $unitPrice = $flight['economy_price'];
+                break;
+            case 'Business':
+                $unitPrice = $flight['business_price'];
+                break;
+            case 'First Class':
+                $unitPrice = $flight['first_class_price'];
+                break;
+            default:
+                $unitPrice = 0;
+        }
+
+        // حساب السعر الإجمالي
+        $totalPrice = $unitPrice * $passengerCount;
+
+        // تجهيز بيانات الحجز
+        $reservationDate = date('Y-m-d H:i:s');
         $reservationData = [
-            'reservation_number' => $reservationNumber,
             'reservation_date' => $reservationDate,
             'status' => 'Pending',
-            'class_name' => $_POST['class_name'],
+            'class_name' => $class,
             'client_id' => $_SESSION['client_id'],
-            'flight_number' => $_POST['flight_number']
+            'flight_number' => $flightNumber,
+            'total_price' => $totalPrice
         ];
 
-        if ($reservationModel->addReservation($reservationData)) {
+        // تنفيذ الحجز
+        $reservationNumber = $reservationModel->addReservation($reservationData);
 
-            $passengerCount = count($_POST['first_name']);
+        if ($reservationNumber) {
             $passengers = [];
-
             for ($i = 0; $i < $passengerCount; $i++) {
                 $passengers[] = [
                     'first_name' => $_POST['first_name'][$i],

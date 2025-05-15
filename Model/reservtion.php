@@ -7,24 +7,24 @@ class Reservation {
     }
 
     // إضافة الحجز مع معالجة الأخطاء
-    public function addReservation($data) {
-        try {
-            $stmt = $this->pdo->prepare("INSERT INTO reservation (reservation_number, reservation_date, status, class_name, client_id, flight_number) 
-                                     VALUES (:reservation_number, :reservation_date, :status, :class_name, :client_id, :flight_number)");
-            $stmt->execute([
-                ':reservation_number' => $data['reservation_number'],
-                ':reservation_date' => $data['reservation_date'],
-                ':status' => $data['status'],
-                ':class_name' => $data['class_name'],
-                ':client_id' => $data['client_id'],
-                ':flight_number' => $data['flight_number']
-            ]);
-            return $data['reservation_number'];
-        } catch (PDOException $e) {
-            error_log("Error in addReservation: " . $e->getMessage());
-            return false;
-        }
+public function addReservation($data) {
+    try {
+        $stmt = $this->pdo->prepare("INSERT INTO reservation (reservation_date, status, class_name, client_id, flight_number, total_price) 
+                                     VALUES (:reservation_date, :status, :class_name, :client_id, :flight_number, :total_price)");
+        $stmt->execute([
+            ':reservation_date' => $data['reservation_date'],
+            ':status' => $data['status'],
+            ':class_name' => $data['class_name'],
+            ':client_id' => $data['client_id'],
+            ':flight_number' => $data['flight_number'],
+            ':total_price' => $data['total_price']
+        ]);
+        return $this->pdo->lastInsertId(); // هذا يُعيد رقم الحجز المُولَّد
+    } catch (PDOException $e) {
+        error_log("Error in addReservation: " . $e->getMessage());
+        return false;
     }
+}
 
     // إضافة المسافر مع معالجة الأخطاء
     
@@ -61,14 +61,14 @@ public function addPassenger($data) {
         ]);
 
         // 3. ربط المسافر بالحجز
-        $stmt = $this->pdo->prepare("
-            INSERT INTO includes (reservation_number, passenger_id)
-            VALUES (:reservation_number, :passenger_id)
-        ");
-        $stmt->execute([
-            ':reservation_number' => $data['reservation_number'],
-            ':passenger_id' => $newIdentityNumber
-        ]);
+       $stmt = $this->pdo->prepare("
+    INSERT INTO includes (reservation_number, passenger_id)
+    VALUES (:reservation_number, :passenger_id)
+");
+$stmt->execute([
+    ':reservation_number' => $data['reservation_number'], // ← هذا الآن int
+    ':passenger_id' => $newIdentityNumber
+]);
 
         $this->pdo->commit();
         return true;

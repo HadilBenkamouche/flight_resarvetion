@@ -202,6 +202,9 @@
             <p><strong>Departure Time:</strong> <?php echo htmlspecialchars($flightDetails['departure_time']); ?></p>
             <p><strong>Arrival Time:</strong> <?php echo htmlspecialchars($flightDetails['arrival_time']); ?></p>
             <p><strong>Flight Type:</strong> <?php echo htmlspecialchars($flightDetails['flight_type']); ?></p>
+            <p><strong>Economy Price:</strong> <?php echo htmlspecialchars($flightDetails['economy_price']); ?> DA</p>
+            <p><strong>Business Price:</strong> <?php echo htmlspecialchars($flightDetails['business_price']); ?> DA</p>
+            <p><strong>First Class Price:</strong> <?php echo htmlspecialchars($flightDetails['first_class_price']); ?> DA</p>
             <p><strong>Aircraft:</strong> <?php echo htmlspecialchars($flightDetails['aircraft_model']); ?></p>
 
             <!-- عدد المقاعد المتبقية لكل كلاس -->

@@ -580,6 +580,11 @@
             <input type="date" name="departure_date" required>
         </div>
 
+         <div class="form-control">
+          <label>Return Date</label>
+          <input type="date">
+        </div>
+        
         <div class="form-control">
             <label>Passengers</label>
             <div style="display: flex; gap: 10px; align-items: flex-end;">
