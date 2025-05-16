@@ -119,8 +119,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         ];
 
         if ($reservationModel->addPayment($paymentData)) {
-            if ($reservationModel->updateReservationStatus($_SESSION['reservation_number'], 'Paid')) {
-                header("Location: ../View/resarvetion/book_confirmide.php");
+            if ($reservationModel->updateReservationStatus($_SESSION['reservation_number'], 'Confirmed')) {
+        header("Location: /flight_resarvetion/controller/resarvetion.php?action=showConfirmation&reservation_number=" . $_SESSION['reservation_number']);
                 exit;
             } else {
                 $_SESSION['error'] = "حدث خطأ أثناء تحديث حالة الحجز";
@@ -133,6 +133,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             exit;
         }
     }
+$reservationNumber = $_SESSION['reservation_number'];
+    if ($_GET['action'] === 'showConfirmation' && isset($_GET['reservation_number'])) {
+   error_log("✅ دخلنا في showConfirmation");
+error_log("رقم الحجز: " . $_GET['reservation_number']);
+
+    $reservationNumber = $_GET['reservation_number'];
+    $details = $reservationModel->getReservationDetails($reservationNumber);
+
+    error_log("📦 تفاصيل الحجز: " . print_r($details, true));
+
+    if ($details) {
+        $_SESSION['confirmation_details'] = $details;
+        error_log("🔁 سيتم التحويل إلى صفحة التأكيد");
+        require_once ' ../View/resarvetion/book_confirmide.php';
+        exit;
+    } else {
+        $_SESSION['error'] = "تعذر العثور على تفاصيل الحجز.";
+        error_log("❌ لم يتم العثور على تفاصيل الحجز.");
+        header("Location: ../View/resarvetion/paymentpage.php");
+        exit;
+    }
+}
+
+
 } // ← ✅ إغلاق القوس المفقود
 
 

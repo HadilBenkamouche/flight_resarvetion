@@ -1,4 +1,11 @@
 
+<pre><?php var_dump($details); ?></pre>
+<?php
+session_start();
+$details = $_SESSION['confirmation_details'] ?? [];
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -207,29 +214,38 @@
 </header>
 
 <!-- Main Content -->
-<div class="confirmation-card">
-    <h1>Reservation Confirmed</h1>
-    <p>Thank you for booking with us!</p>
-    <p>Your reservation has been successfully processed.</p>
+<div class="confirmation-container">
+    <div class="confirmation-box">
+        <div class="success-icon">✔️</div>
+        <h2>Your Reservation is Confirmed!</h2>
+        <p>Thank you for choosing Nova Travels.</p>
 
-    <div class="details">
-        <?php foreach ($passengers as $passenger): ?>
-            <p><strong>Passenger:</strong> <?= htmlspecialchars($passenger['first_name'] . ' ' . $passenger['last_name']) ?></p>
-            <p><strong>Email:</strong> <?= htmlspecialchars($passenger['email']) ?></p>
-            <p><strong>Phone Number:</strong> <?= htmlspecialchars($passenger['phone']) ?></p>
+        <?php if (!empty($details)): 
+            $flight = $details[0]; 
+        ?>
+        <div class="summary-section">
+            <h3>Flight Details</h3>
+            <div class="info-row"><div class="info-label">From:</div><div><?= htmlspecialchars($flight['departure_city']) ?></div></div>
+            <div class="info-row"><div class="info-label">To:</div><div><?= htmlspecialchars($flight['arrival_city']) ?></div></div>
+            <div class="info-row"><div class="info-label">Date:</div><div><?= htmlspecialchars($flight['reservation_date']) ?></div></div>
+            <div class="info-row"><div class="info-label">Class:</div><div><?= htmlspecialchars($flight['class_name']) ?></div></div>
+        </div>
+
+        <div class="summary-section">
+            <h3>Passenger Info</h3>
+            <?php foreach ($details as $passenger): ?>
+            <div class="info-row"><div class="info-label">Name:</div><div><?= htmlspecialchars($passenger['first_name'] . ' ' . $passenger['last_name']) ?></div></div>
+            <div class="info-row"><div class="info-label">Email:</div><div><?= htmlspecialchars($passenger['email']) ?></div></div>
             <hr>
-        <?php endforeach; ?>
-    </div>
+            <?php endforeach; ?>
+        </div>
 
-    <div class="flight-info">
-        <p><strong>Flight Number:</strong> <?= htmlspecialchars($reservation['flight_number']) ?></p>
-        <p><strong>Destination:</strong> <?= htmlspecialchars($reservation['arrival_airport']) ?></p>
-        <p><strong>Departure Date:</strong> <?= htmlspecialchars($reservation['departure_date']) ?></p>
-        <p><strong>Class:</strong> <?= htmlspecialchars($reservation['class_name']) ?></p>
-        <p><strong>Payment Method:</strong> Mastercard</p> <!-- ← غيّرها إذا كنت تخزن نوع البطاقة -->
+        <div class="reservation-code">Reservation Code: <?= htmlspecialchars($flight['reservation_number']) ?></div>
+        <?php else: ?>
+        <p>لا توجد معلومات حجز متاحة.</p>
+        <?php endif; ?>
     </div>
 </div>
-
 
 </body>
 </html>

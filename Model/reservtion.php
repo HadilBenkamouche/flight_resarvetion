@@ -113,6 +113,45 @@ $stmt->execute([
             return false;
         }
     }
+
+public function getReservationDetails($reservationNumber) {
+    try {
+        // استعلام مخصص للحصول فقط على البيانات المطلوبة للعرض
+      $stmt = $pdo->prepare("
+    SELECT 
+        r.reservation_number,
+        r.reservation_date,
+        r.class_name,
+        dep_city.name AS departure_city,
+        arr_city.name AS arrival_city,
+        p.first_name,
+        p.last_name,
+        p.email
+    FROM reservation r
+    JOIN flight f ON r.flight_number = f.flight_number
+    JOIN flightroute fr ON f.flight_number = fr.flight_number
+    JOIN airport dep_airport ON fr.departure_airport = dep_airport.iata_code
+    JOIN airport arr_airport ON fr.arrival_airport = arr_airport.iata_code
+    JOIN city dep_city ON dep_airport.city_code = dep_city.city_code
+    JOIN city arr_city ON arr_airport.city_code = arr_city.city_code
+    JOIN includes i ON i.reservation_number = r.reservation_number
+    JOIN passenger p ON p.identity_number = i.passenger_id
+    WHERE r.reservation_number = :reservation_number
+");
+
+$stmt->execute(['reservation_number' => $reservationNumber]);
+$details = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+    } catch (PDOException $e) {
+        error_log("Error in getReservationDetails: " . $e->getMessage());
+        return [];
+    }
+}
+
+
+ 
+
 }
 
 
