@@ -113,44 +113,45 @@ $stmt->execute([
             return false;
         }
     }
-
 public function getReservationDetails($reservationNumber) {
-    try {
-        // استعلام مخصص للحصول فقط على البيانات المطلوبة للعرض
-      $stmt = $pdo->prepare("
-    SELECT 
-        r.reservation_number,
-        r.reservation_date,
-        r.class_name,
-        dep_city.name AS departure_city,
-        arr_city.name AS arrival_city,
-        p.first_name,
-        p.last_name,
-        p.email
-    FROM reservation r
-    JOIN flight f ON r.flight_number = f.flight_number
-    JOIN flightroute fr ON f.flight_number = fr.flight_number
-    JOIN airport dep_airport ON fr.departure_airport = dep_airport.iata_code
-    JOIN airport arr_airport ON fr.arrival_airport = arr_airport.iata_code
-    JOIN city dep_city ON dep_airport.city_code = dep_city.city_code
-    JOIN city arr_city ON arr_airport.city_code = arr_city.city_code
-    JOIN includes i ON i.reservation_number = r.reservation_number
-    JOIN passenger p ON p.identity_number = i.passenger_id
-    WHERE r.reservation_number = :reservation_number
-");
-
-$stmt->execute(['reservation_number' => $reservationNumber]);
-$details = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $sql = "
+       SELECT 
+    r.reservation_number, 
+    r.class_name,
+    r.reservation_date,
+    r.total_price,
+    f.departure_time,
+    f.arrival_time,
+    f.flight_number,
+    da.airport_name AS departure_airport,
+    aa.airport_name AS arrival_airport
+FROM Reservation r
+JOIN Flight f ON r.flight_number = f.flight_number
+JOIN FlightRoute fr ON fr.flight_number = f.flight_number
+JOIN Airport da ON fr.departure_airport = da.iata_code
+JOIN Airport aa ON fr.arrival_airport = aa.iata_code
+WHERE r.reservation_number = ?
+LIMIT 1
 
 
-    } catch (PDOException $e) {
-        error_log("Error in getReservationDetails: " . $e->getMessage());
-        return [];
-    }
+";
+
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([$reservationNumber]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-
- 
+public function getPassengersByReservation($reservationNumber) {
+    $sql = "
+        SELECT p.*
+        FROM passenger p
+        INNER JOIN includes i ON p.identity_number = i.passenger_id
+        WHERE i.reservation_number = :reservation_number
+    ";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute(['reservation_number' => $reservationNumber]);
+    return $stmt->fetchAll();
+}
 
 }
 
