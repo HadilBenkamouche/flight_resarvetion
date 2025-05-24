@@ -2,18 +2,30 @@
 class Airport {
     private $db;
 
-    public function __construct($db) {
-        $this->db = $db;
+    public function __construct($pdo) {
+        $this->db = $pdo;
     }
 
-    // جلب جميع المطارات مع أسماء المدن المرتبطة بها
-    public function getAllAirportsWithCities() {
-        $sql = "SELECT a.iata_code, a.airport_name, a.airport_type, c.name AS city_name
+    // مطارات الانطلاق فقط
+    public function getDepartureAirports() {
+        $sql = "SELECT DISTINCT a.iata_code, a.airport_name, c.name AS city_name
                 FROM Airport a
                 JOIN City c ON a.city_code = c.city_code
-                ORDER BY c.name, a.airport_name";
+                JOIN FlightRoute fr ON fr.departure_airport = a.iata_code";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // مطارات الوصول فقط
+    public function getArrivalAirports() {
+        $sql = "SELECT DISTINCT a.iata_code, a.airport_name, c.name AS city_name
+                FROM Airport a
+                JOIN City c ON a.city_code = c.city_code
+                JOIN FlightRoute fr ON fr.arrival_airport = a.iata_code";
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
+
 ?>
+

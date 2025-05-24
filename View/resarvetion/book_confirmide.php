@@ -11,10 +11,6 @@ $reservation = $details['reservation'];
 $passengers = $details['passengers'];
 $reservationNumber = $reservation['reservation_number'];
 ?>
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

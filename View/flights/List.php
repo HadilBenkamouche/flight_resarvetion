@@ -192,7 +192,7 @@
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="reservation.html" class="nav-link">Book a Flight</a>
                 <a href="reservations.html" class="nav-link">Reservations</a>
-                <a href="login.html" class="nav-link">Log In</a>
+                
             </div>
             <div class="auth-buttons">
                 <button class="login-btn">Login</button>

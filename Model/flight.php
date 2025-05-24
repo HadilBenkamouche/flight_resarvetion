@@ -7,18 +7,28 @@ class Flight {
     }
 
     // جلب جميع الرحلات مع اسم الشركة ونوع الطائرة
-    public function getAllFlights() {
-        $sql = "SELECT f.*, c.name AS company_name, a.model AS aircraft_model
-                FROM Flight f
-                JOIN Company c ON f.company_code = c.company_code
-                JOIN Aircraft a ON f.aircraft_code = a.aircraft_code";
+  public function getAllFlights() {
+    $sql = "SELECT f.*, 
+                   c.name AS company_name, 
+                   a.model AS aircraft_model,
+                   dep_city.name AS departure_city,
+                   arr_city.name AS arrival_city
+            FROM Flight f
+            JOIN Company c ON f.company_code = c.company_code
+            JOIN Aircraft a ON f.aircraft_code = a.aircraft_code
+            JOIN FlightRoute fr ON f.flight_number = fr.flight_number
+            JOIN Airport dep_airport ON fr.departure_airport = dep_airport.iata_code
+            JOIN Airport arr_airport ON fr.arrival_airport = arr_airport.iata_code
+            JOIN City dep_city ON dep_airport.city_code = dep_city.city_code
+            JOIN City arr_city ON arr_airport.city_code = arr_city.city_code";
 
-        $stmt = $this->db->query($sql);
-        if ($stmt) {
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-        return [];
+    $stmt = $this->db->query($sql);
+    if ($stmt) {
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    return [];
+}
+
 
     // جلب تفاصيل رحلة باستخدام رقم الرحلة
     public function searchFlights($from, $to, $date, $tripType, $passengers) {

@@ -1,5 +1,4 @@
 <?php
-
 require_once '../confi/db.php';
 require_once '../Model/reservtion.php';
 require_once '../Model/flight.php';
@@ -26,7 +25,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'showConfirmation') {
 
     if (!$reservationDetails) {
         $_SESSION['error'] = "رقم الحجز غير موجود.";
-        header("Location: ../View/reservation/booking.php");
+        header("Location: ../View/resarvetion/booking.php");
         exit;
     }
 
@@ -38,15 +37,10 @@ if (isset($_GET['action']) && $_GET['action'] === 'showConfirmation') {
         'reservation' => $reservationDetails,
         'passengers' => $passengers,
     ];
-
-    // إعادة التوجيه لصفحة التأكيد
-    header("Location: ../View/resarvetion/book_confirmide.php");
+// إعادة التوجيه لصفحة التأكيد
+header("Location: ../View/resarvetion/book_confirmide.php");
     exit;
 }
-
-
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     
     if ($_POST['action'] === 'addReservation') {
@@ -139,6 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             exit;
         }
 
+    $reservationNumber = $_SESSION['reservation_number'];
         $paymentData = [
             'reservation_number' => $_SESSION['reservation_number'],
             'card_name' => $_POST['card_name'],
@@ -150,10 +145,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
         if ($reservationModel->addPayment($paymentData)) {
             if ($reservationModel->updateReservationStatus($_SESSION['reservation_number'], 'Confirmed')) {
-        $_SESSION['reservation_number'] = $reservationNumber;
-                header("Location: /flight_resarvetion/controller/resarvetion.php?action=showConfirmation&reservation_number=" . $_SESSION['reservation_number']);
-                exit;
-            } else {
+                   $reservationNumber = $_SESSION['reservation_number'];
+                header("Location: http://localhost/flight_resarvetion/controller/resarvetion.php?action=showConfirmation&reservation_number=" . $reservationNumber);
+                            exit;
+
+                  } else {
                 $_SESSION['error'] = "حدث خطأ أثناء تحديث حالة الحجز";
                 header("Location: ../View/resarvetion/paymentpage.php");
                 exit;

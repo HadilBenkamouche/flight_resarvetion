@@ -1,3 +1,16 @@
+<?php
+
+
+require_once __DIR__ . '/confi/db.php';
+require_once __DIR__ . '/Model/airport.php';
+
+$airportModel = new Airport($pdo);
+$departureAirports = $airportModel->getDepartureAirports();
+$arrivalAirports = $airportModel->getArrivalAirports();
+
+?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -502,7 +515,7 @@
     </div>
     <div class="nav-links">
       <a href="#" class="nav-link">Home</a>
-      <a href="#" class="nav-link">Flights</a>
+     <a href="controller/flight.php?action=List" class="nav-link">Flights</a>
       <a href="#" class="nav-link">Contact Us</a>
     </div>
     <div class="auth-buttons">
@@ -563,16 +576,32 @@
             </select>
         </div>
 
-        <div class="form-control">
-            <label>From</label>
-            <input type="text" name="from" placeholder="City or Airport" required>
-        </div>
+         <!-- مطارات الانطلاق -->
+<div class="form-control">
+    <label>From</label>
+    <select name="from" required>
+        <option value="">Select Departure</option>
+        <?php foreach ($departureAirports as $airport): ?>
+            <option value="<?= htmlspecialchars($airport['city_name']) ?>">
+                <?= htmlspecialchars($airport['city_name'] . " - " . $airport['airport_name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
 
-        <div class="form-control">
-            <label>To</label>
-            <input type="text" name="to" placeholder="City or Airport" required>
-        </div>
-    </div>
+<!-- مطارات الوصول -->
+<div class="form-control">
+    <label>To</label>
+    <select name="to" required>
+        <option value="">Select Arrival</option>
+        <?php foreach ($arrivalAirports as $airport): ?>
+            <option value="<?= htmlspecialchars($airport['city_name']) ?>">
+                <?= htmlspecialchars($airport['city_name'] . " - " . $airport['airport_name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
+</div>
 
     <div class="form-group">
         <div class="form-control">
