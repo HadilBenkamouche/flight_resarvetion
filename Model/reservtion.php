@@ -153,6 +153,82 @@ public function getPassengersByReservation($reservationNumber) {
     return $stmt->fetchAll();
 }
 
+
+ public function getPastBookings($client_id) {
+        $sql = "
+            SELECT 
+            r.reservation_number,
+            r.reservation_date,
+            r.status,
+            f.flight_number,
+            f.departure_time,
+            f.arrival_time,
+            c.name AS company_name,
+            city_from.name AS departure_city,
+            city_to.name AS arrival_city
+            FROM reservation r
+            JOIN flight f ON r.flight_number = f.flight_number
+            JOIN company c ON f.company_code = c.company_code
+            JOIN flightroute fr ON f.flight_number = fr.flight_number
+            JOIN airport a_from ON fr.departure_airport = a_from.iata_code
+            JOIN airport a_to ON fr.arrival_airport = a_to.iata_code
+            JOIN city city_from ON a_from.city_code = city_from.city_code
+            JOIN city city_to ON a_to.city_code = city_to.city_code
+            WHERE r.client_id = :client_id
+            ORDER BY r.reservation_date DESC
+        ";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':client_id' => $client_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+ public function getReservationsByClientId($clientId) {
+    $stmt = $this->pdo->prepare("
+        SELECT 
+            r.reservation_number,
+            r.reservation_date,
+            r.status,
+            r.class_name,
+            f.flight_number,
+            f.departure_time,
+            f.arrival_time,
+            f.destination,
+            c.name AS company_name,
+            (
+                SELECT COUNT(*) 
+                FROM includes i 
+                WHERE i.reservation_number = r.reservation_number
+            ) AS passenger_count,
+            p.card_number
+        FROM reservation r
+        JOIN flight f ON r.flight_number = f.flight_number
+        JOIN company c ON f.company_code = c.company_code
+        LEFT JOIN payment p ON r.reservation_number = p.reservation_number
+        WHERE r.client_id = :clientId
+        ORDER BY r.reservation_date DESC
+    ");
+    $stmt->execute(['clientId' => $clientId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+ }
+ public function getUpcomingBookingsByClientId($client_id) {
+    $query = "SELECT r.id AS booking_id, c2.name AS destination, f.departure_time, 
+                     CONCAT(c1.name, ' - ', c2.name) AS route, comp.name AS airline, r.status
+              FROM reservation r
+              JOIN flight f ON r.flight_number = f.flight_number
+              JOIN city c1 ON f.departure_city_id = c1.id
+              JOIN city c2 ON f.arrival_city_id = c2.id
+              JOIN company comp ON f.company_id = comp.id
+              WHERE r.client_id = ? AND f.departure_time > NOW()
+              ORDER BY f.departure_time ASC";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$client_id]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+ }
+
+
+
+
 }
 
 

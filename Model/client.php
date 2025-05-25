@@ -50,7 +50,24 @@ class Client {
     
         return false;
     }
+    
+  public function getClientById($clientId) {
+        $sql = "SELECT * FROM client WHERE client_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$clientId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    // ✅ دالة التحديث
+    public function updateClient($clientId, $firstName, $email, $password) {
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $sql = "UPDATE client SET first_name = ?, email = ?, password = ? WHERE client_id = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$firstName, $email, $hashedPassword, $clientId]);
+    }
+
+
+}
 
 ?>
 

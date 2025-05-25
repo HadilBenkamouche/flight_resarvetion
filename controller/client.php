@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     header("Location: ../View/client/Admin_dashbord.php");
                     exit();
                 } else {
-                    header("Location: ../index.php");
+                     header("Location: ../View/dashboard.php");
                     exit();
                 }
             } else {

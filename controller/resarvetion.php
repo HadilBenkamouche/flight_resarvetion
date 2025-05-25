@@ -80,9 +80,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             'flight_number' => $flightNumber,
             'total_price' => $totalPrice
         ];
-
-        // تنفيذ الحجز
-        $reservationNumber = $reservationModel->addReservation($reservationData);
+ // عرض الحجوزات الخاصة بالمستخدم الحالي
+      if (isset($_GET['action']) && $_GET['action'] === 'Viewreservation') {
+      $reservations = $reservationModel->getReservationsByClientId($_SESSION['client_id']);
+      require_once '../View/client/reservation.php';
+       exit;
+     }
+      // عرض الحجوزات القادمة للمستخدم الحالي
+     if (isset($_GET['action']) && $_GET['action'] === 'upcoming') {
+      $upcomingBookings = $reservationModel->getUpcomingBookingsByClientId($_SESSION['client_id']);
+      require_once '../View/resarvetion/upcomingbookings.php';
+     exit;
+     }
+       
+       
+       // تنفيذ الحجز
+ $reservationNumber = $reservationModel->addReservation($reservationData);
 
         if ($reservationNumber) {
             $passengers = [];
@@ -160,6 +173,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             exit;
         }
     }
+
+
+
+
+
+
+
+
+
 
 
 } // ← ✅ إغلاق القوس المفقود
