@@ -22,30 +22,39 @@ if ($action == 'List') {
         echo "الرحلة غير موجودة.";
     }
 
-} elseif ($action == 'search' && isset($_GET['from'], $_GET['to'], $_GET['departure_date'])) {
-    // التقاط البيانات القادمة من نموذج البحث
-    $from = $_GET['from'];
-    $to = $_GET['to'];
-    $date = $_GET['departure_date'];
+} 
+
+if ($action == 'search' && isset($_GET['from'], $_GET['to'], $_GET['departure_date'])) {
+    $fromAirportCode = $_GET['from']; // رمز المطار المغادر
+    $toAirportCode = $_GET['to'];     // رمز المطار الواصل
+    $departureDate = $_GET['departure_date'];
+    $returnDate = $_GET['return_date'] ?? null; // تاريخ العودة (قد لا يكون موجودًا)
     $tripType = $_GET['trip_type'] ?? 'oneway';
-    
-    // تصحيح قيمة tripType لتناسب قاعدة البيانات
+
+    // تحديد نوع الرحلة
     if ($tripType === 'oneway') {
         $tripType = 'One Way';
     } elseif ($tripType === 'roundtrip') {
         $tripType = 'Round Trip';
     }
-    
-    // حساب عدد الركاب من الحقول المختلفة
+
     $adults = isset($_GET['adults']) ? (int)$_GET['adults'] : 1;
     $children = isset($_GET['children']) ? (int)$_GET['children'] : 0;
     $infants = isset($_GET['infants']) ? (int)$_GET['infants'] : 0;
     $passengers = $adults + $children + $infants;
 
-    // استدعاء دالة البحث
-    $flights = $flight->searchFlights($from, $to, $date, $tripType, $passengers);
-    require_once '../View/flights/List.php';
+    // تنفيذ البحث حسب نوع الرحلة
+    if ($tripType === 'Round Trip' && !empty($returnDate)) {
+        $flights = $flight->searchRoundTripFlights($fromAirportCode, $toAirportCode, $departureDate, $returnDate);
+         $outboundFlights = $flights['outbound'];
+          $returnFlights = $flights['return'];
+        require_once '../View/flights/ListRT.php';
+    } else {
+        $flights = $flight->searchFlights($fromAirportCode, $toAirportCode, $departureDate, $tripType, $passengers);
+        require_once '../View/flights/List.php';
+    }
 }
+
 
 elseif ($action == 'details' && isset($_GET['flight_number'])) {
     // جلب تفاصيل الرحلة باستخدام رقم الرحلة
@@ -58,28 +67,46 @@ elseif ($action == 'details' && isset($_GET['flight_number'])) {
         echo "الرحلة غير موجودة.";
     }
 }
+if ($action == 'add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $flightNumber     = $_POST['flightNumber'];
+    $flightType       = $_POST['flightType'];
+    $companyCode      = $_POST['companyCode'];
+    $aircraftCode     = $_POST['aircraftCode'];
+    $departureAirport = $_POST['departureAirport'];  // فقط لـ flightrout
+    $arrivalAirport   = $_POST['arrivalAirport'];    // فقط لـ flightrout
+    $departure        = $_POST['departure'];
+    $arrival          = $_POST['arrival'];
+    $destination      = $_POST['destination'];
+    $firstPrice       = $_POST['firstClassPrice'];
+    $businessPrice    = $_POST['businessClassPrice'];
+    $economyPrice     = $_POST['economyClassPrice'];
 
-elseif ($action == 'add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    $flightNumber = $_POST['flightNumber'];
-    $destination = $_POST['destination'];
-    $departure = $_POST['departure'];
-    $arrival = $_POST['arrival'];
-    $flightType = $_POST['flightType'];
-
-    $result = $flight->addFlight($flightNumber, $destination, $departure, $arrival, $flightType);
+    // إدخال بيانات الرحلة في جدول flight (دون المطارات)
+    $result = $flight->addFlight(
+        $flightNumber, $flightType, $companyCode, $aircraftCode,
+        $departure, $arrival, $destination,
+        $firstPrice, $businessPrice, $economyPrice
+    );
 
     if ($result) {
+        // ثم إدخال بيانات المسار في جدول flightrout
+        $stmt = $pdo->prepare("INSERT INTO flightroute (flight_number, departure_airport, arrival_airport)
+                               VALUES (:flight_number, :departure_airport, :arrival_airport)");
+        $stmt->bindParam(':flight_number', $flightNumber);
+        $stmt->bindParam(':departure_airport', $departureAirport);
+        $stmt->bindParam(':arrival_airport', $arrivalAirport);
+        $stmt->execute();
+
         header("Location: ../View/flights/manageflight.php?success=1");
         exit;
     } else {
         echo "فشل في إضافة الرحلة.";
     }
+
+// كونترولر جلب رحلات الذهاب والعودة
+
+
 }
-
-
-
-
-
 
 ?>
 

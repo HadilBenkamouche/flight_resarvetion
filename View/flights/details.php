@@ -173,19 +173,19 @@
 <!-- Navbar Section -->
 <header>
     <nav class="navbar">
-        <img src="logo.png" alt="Logo" class="logo">
+        <img src="../logo.png" alt="Logo" class="logo">
         <div class="search-bar">
             <input type="text" placeholder="Search...">
         </div>
         <div class="nav-links">
-            <a href="localhost/flight_resarvetion/" class="nav-link">Home</a>
-            <a href="index.html#booking" class="nav-link">Book a Flight</a>
+            <a href="../index.php" class="nav-link">Home</a>
+            <a href="../View/flights/List.php" class="nav-link">Book a Flight</a>
             <a href="reservations.html" class="nav-link">Reservations</a>
             
         </div>
         <div class="auth-buttons">
-            <button class="login-btn">Login</button>
-            <button class="signup-btn">Sign Up</button>
+             <a href="../View/client/login.php" class="login-btn">Login</a>
+            <a href="../View/client/signup.php" class="signup-btn">Sign Up</a>
         </div>
     </nav>
 </header>
@@ -215,7 +215,7 @@
     <?php endif; ?>
 
     <!-- Buttons -->
-    <a href="details.php" class="btn-back">Back to Flights</a>
+    <a href="List.php" class="btn-back">Back to Flights</a>
 
     <a href="/flight_resarvetion/View/resarvetion/booking.php?flight_number=<?php echo urlencode($flightNumber); ?>" class="btn-book">Book This Flight</a>
 

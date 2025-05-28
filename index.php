@@ -10,8 +10,6 @@ $arrivalAirports = $airportModel->getArrivalAirports();
 
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -569,8 +567,8 @@ $arrivalAirports = $airportModel->getArrivalAirports();
     <div class="form-group">
         <div class="form-control">
             <label>Type of Flight</label>
-            <select name="trip_type" required>
-                <option value="">Select</option>
+            <select name="trip_type" id="trip_type" required onchange="toggleReturnDate()">
+              <option value="">Select</option>
                 <option value="oneway">One Way</option>
                 <option value="roundtrip">Round Trip</option>
             </select>
@@ -582,7 +580,7 @@ $arrivalAirports = $airportModel->getArrivalAirports();
     <select name="from" required>
         <option value="">Select Departure</option>
         <?php foreach ($departureAirports as $airport): ?>
-            <option value="<?= htmlspecialchars($airport['city_name']) ?>">
+            <option value="<?= htmlspecialchars($airport['iata_code']) ?>">
                 <?= htmlspecialchars($airport['city_name'] . " - " . $airport['airport_name']) ?>
             </option>
         <?php endforeach; ?>
@@ -595,7 +593,7 @@ $arrivalAirports = $airportModel->getArrivalAirports();
     <select name="to" required>
         <option value="">Select Arrival</option>
         <?php foreach ($arrivalAirports as $airport): ?>
-            <option value="<?= htmlspecialchars($airport['city_name']) ?>">
+            <option value="<?= htmlspecialchars($airport['iata_code']) ?>">
                 <?= htmlspecialchars($airport['city_name'] . " - " . $airport['airport_name']) ?>
             </option>
         <?php endforeach; ?>
@@ -609,10 +607,11 @@ $arrivalAirports = $airportModel->getArrivalAirports();
             <input type="date" name="departure_date" required>
         </div>
 
-         <div class="form-control">
-          <label>Return Date</label>
-          <input type="date">
-        </div>
+         <div class="form-control" id="return_date_container">
+  <label>Return Date</label>
+  <input type="date" name="return_date" id="return_date">
+</div>
+
         
         <div class="form-control">
             <label>Passengers</label>
@@ -636,6 +635,27 @@ $arrivalAirports = $airportModel->getArrivalAirports();
     <button type="submit" class="search-button">Search Flights</button>
 </form>
 
+<script>
+function toggleReturnDate() {
+  const tripType = document.getElementById("trip_type").value;
+  const returnInput = document.getElementById("return_date");
+  const returnContainer = document.getElementById("return_date_container");
+
+  if (tripType === "roundtrip") {
+    returnContainer.style.display = "block";
+    returnInput.required = true;
+  } else {
+    returnContainer.style.display = "none";
+    returnInput.required = false;
+    returnInput.value = "";
+  }
+}
+
+// تشغيل عند تحميل الصفحة للتأكد من الحالة الحالية
+document.addEventListener("DOMContentLoaded", function () {
+  toggleReturnDate();
+});
+</script>
 
   <!-- OFFERS SECTION -->
 <div class="offers-section">

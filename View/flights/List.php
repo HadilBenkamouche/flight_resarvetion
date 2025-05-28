@@ -184,19 +184,19 @@
 <body>
     <header>
         <nav class="navbar">
-            <img src="logo.png" alt="Logo" class="logo">
+            <img src="../logo.png" alt="Logo" class="logo">
             <div class="search-bar">
                 <input type="text" placeholder="Search...">
             </div>
             <div class="nav-links">
-                <a href="index.html" class="nav-link">Home</a>
+                <a href="../index.php" class="nav-link">Home</a>
                 <a href="reservation.html" class="nav-link">Book a Flight</a>
                 <a href="reservations.html" class="nav-link">Reservations</a>
                 
             </div>
             <div class="auth-buttons">
-                <button class="login-btn">Login</button>
-                <button class="signup-btn">Sign Up</button>
+                 <a href="../View/client/login.php" class="login-btn">Login</a>
+                 <a href="../View/client/signup.php" class="signup-btn">Sign Up</a>
             </div>
         </nav>
     </header>

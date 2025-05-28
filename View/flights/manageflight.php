@@ -1,4 +1,18 @@
 
+   <?php if (isset($_GET['deleted']) && $_GET['deleted'] == 1): ?>
+    <div class="alert alert-success">تم حذف الرحلة بنجاح.</div>
+<?php elseif (isset($_GET['error']) && $_GET['error'] == 'delete_failed'): ?>
+    <div class="alert alert-danger">فشل في حذف الرحلة.</div>
+<?php endif; ?>
+
+   <?php
+require_once '../../confi/db.php'; // تأكدي من صحة المسار
+require_once '../../Model/flight.php';
+
+$flightModel = new flight($pdo); 
+$flights = $flightModel->getAllFlights();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -147,7 +161,7 @@
   <main>
     <h1>Manage Flights</h1>
     <div class="top-actions">
-    <a href="../../View/flights/addflight.php" class="add-flight-btn">Add New Flight</a>
+      <a href="../../View/flights/addflight.php" class="add-flight-btn">Add New Flight</a>
     </div>
     <table>
       <thead>
@@ -160,26 +174,25 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>FL123</td>
-          <td>Mars</td>
-          <td>2025-06-01 10:00</td>
-          <td>2025-06-01 18:00</td>
-          <td>
-            <button class="action-btn edit-btn">Edit</button>
-            <button class="action-btn delete-btn">Delete</button>
-          </td>
-        </tr>
-        <tr>
-          <td>FL456</td>
-          <td>Venus</td>
-          <td>2025-07-15 09:30</td>
-          <td>2025-07-15 14:45</td>
-          <td>
-            <button class="action-btn edit-btn">Edit</button>
-            <button class="action-btn delete-btn">Delete</button>
-          </td>
-        </tr>
+        <?php if (!empty($flights)): ?>
+          <?php foreach ($flights as $flight): ?>
+            <tr>
+              <td><?= htmlspecialchars($flight['flight_number']) ?></td>
+              <td><?= htmlspecialchars($flight['destination']) ?></td>
+              <td><?= htmlspecialchars($flight['departure_time']) ?></td>
+              <td><?= htmlspecialchars($flight['arrival_time']) ?></td>
+              <td>
+              <a class="action-btn edit-btn" href="editflight.php?flight_number=<?= $flight['flight_number'] ?>">Edit</a>
+              <a class="action-btn delete-btn" href="deleteflight.php?flight_number=<?= $flight['flight_number'] ?>" onclick="return confirm('Are you sure you want to delete this flight?')">Delete</a>
+
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <tr>
+            <td colspan="5">No flights found.</td>
+          </tr>
+        <?php endif; ?>
       </tbody>
     </table>
   </main>

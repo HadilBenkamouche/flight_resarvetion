@@ -31,41 +31,37 @@ class Flight {
 
 
     // جلب تفاصيل رحلة باستخدام رقم الرحلة
-    public function searchFlights($from, $to, $date, $tripType, $passengers) {
-        // الاستعلام
-        $sql = "SELECT f.*, 
-                       dep_city.name AS departure_city, 
-                       arr_city.name AS arrival_city,
-                       c.name AS company_name,
-                       a.model AS aircraft_model,
-                       (a.capacity - COALESCE(r.booked_seats, 0)) AS available_seats
-                FROM Flight f
-                JOIN FlightRoute fr ON f.flight_number = fr.flight_number
-                JOIN Airport dep ON fr.departure_airport = dep.iata_code
-                JOIN Airport arr ON fr.arrival_airport = arr.iata_code
-                JOIN City dep_city ON dep.city_code = dep_city.city_code
-                JOIN City arr_city ON arr.city_code = arr_city.city_code
-                JOIN Company c ON f.company_code = c.company_code
-                JOIN Aircraft a ON f.aircraft_code = a.aircraft_code
-                LEFT JOIN (
-                    SELECT flight_number, COUNT(*) AS booked_seats
-                    FROM Reservation
-                    GROUP BY flight_number
-                ) r ON f.flight_number = r.flight_number
-                WHERE dep_city.name = ? 
-                  AND arr_city.name = ? 
-                  AND DATE(f.departure_time) = ? 
-                  AND f.flight_type = ? 
-                HAVING available_seats >= ?";
+    public function searchFlights($fromAirportCode, $toAirportCode, $date, $tripType, $passengers) {
+$sql = "SELECT f.*, 
+               dep_city.name AS departure_city, 
+               arr_city.name AS arrival_city,
+               c.name AS company_name,
+               a.model AS aircraft_model,
+               (a.capacity - COALESCE(r.booked_seats, 0)) AS available_seats
+        FROM Flight f
+        JOIN FlightRoute fr ON f.flight_number = fr.flight_number
+        JOIN Airport dep ON fr.departure_airport = dep.iata_code
+        JOIN Airport arr ON fr.arrival_airport = arr.iata_code
+        JOIN City dep_city ON dep.city_code = dep_city.city_code
+        JOIN City arr_city ON arr.city_code = arr_city.city_code
+        JOIN Company c ON f.company_code = c.company_code
+        JOIN Aircraft a ON f.aircraft_code = a.aircraft_code
+        LEFT JOIN (
+            SELECT flight_number, COUNT(*) AS booked_seats
+            FROM Reservation
+            GROUP BY flight_number
+        ) r ON f.flight_number = r.flight_number
+        WHERE dep.iata_code = ? 
+          AND arr.iata_code = ? 
+          AND DATE(f.departure_time) = ? 
+          AND f.flight_type = ? 
+        HAVING available_seats >= ?";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$fromAirportCode, $toAirportCode, $date, $tripType, $passengers]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
     
-        // تجهيز الاستعلام
-        $stmt = $this->db->prepare($sql);
-        // تنفيذ الاستعلام مع القيم
-        $stmt->execute([$from, $to, $date, $tripType, $passengers]);
-        
-        // استرجاع النتائج
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
     public function getFlightByNumber($flightNumber) {
         $sql = "
             SELECT 
@@ -114,28 +110,83 @@ class Flight {
     
     
      
-    public function addFlight($flightNumber, $destination, $departure, $arrival, $flightType) {
-        $sql = "INSERT INTO flight (flight_number, destination, departure_time, arrival_time, flight_type)
-                VALUES (:flight_number, :destination, :departure, :arrival, :flight_type)";
-        
-        // تحضير الاستعلام
+  public function addFlight($flightNumber, $flightType, $companyCode, $aircraftCode,
+                          $departure, $arrival, $destination,
+                          $firstPrice, $businessPrice, $economyPrice) {
+
+    $sql = "INSERT INTO flight (
+                flight_number, flight_type, company_code, aircraft_code,
+                departure_time, arrival_time, destination,
+                first_class_price, business_price, economy_price
+            ) VALUES (
+                :flight_number, :flight_type, :company_code, :aircraft_code,
+                :departure_time, :arrival_time, :destination,
+                :first_price, :business_price, :economy_price
+            )";
+
+    $stmt = $this->db->prepare($sql);
+
+    $stmt->bindParam(':flight_number', $flightNumber);
+    $stmt->bindParam(':flight_type', $flightType);
+    $stmt->bindParam(':company_code', $companyCode);
+    $stmt->bindParam(':aircraft_code', $aircraftCode);  // تأكد من الاسم في الجدول
+    $stmt->bindParam(':departure_time', $departure);
+    $stmt->bindParam(':arrival_time', $arrival);
+    $stmt->bindParam(':destination', $destination);
+    $stmt->bindParam(':first_price', $firstPrice);
+    $stmt->bindParam(':business_price', $businessPrice);
+    $stmt->bindParam(':economy_price', $economyPrice);
+
+    return $stmt->execute();
+}
+
+   public function deleteFlight($flightNumber) {
+        $sql = "DELETE FROM Flight WHERE flight_number = ?";
         $stmt = $this->db->prepare($sql);
-        
-        // ربط المعاملات
-        $stmt->bindParam(':flight_number', $flightNumber);
-        $stmt->bindParam(':destination', $destination);
-        $stmt->bindParam(':departure', $departure);
-        $stmt->bindParam(':arrival', $arrival);
-        $stmt->bindParam(':flight_type', $flightType);
-        
-        // تنفيذ الاستعلام
-        return $stmt->execute();
+        return $stmt->execute([$flightNumber]);
     }
-    
-    
-     
-    
-    
+
+// دالة جلب رحلات الذهاب والعودة 
+
+public function searchRoundTripFlights($departureAirportId, $arrivalAirportId, $departureDate, $returnDate) {
+        // جلب رحلات الذهاب
+        $stmt1 = $this->db->prepare("
+            SELECT f.*, fr.departure_airport, fr.arrival_airport,
+                   da.airport_name AS departure_airport_name,
+                   aa.airport_name AS arrival_airport_name
+            FROM Flight f
+            INNER JOIN FlightRoute fr ON f.flight_number = fr.flight_number
+            INNER JOIN Airport da ON fr.departure_airport = da.iata_code
+            INNER JOIN Airport aa ON fr.arrival_airport = aa.iata_code
+            WHERE fr.departure_airport = ? 
+              AND fr.arrival_airport = ? 
+              AND DATE(f.departure_time) = ?
+        ");
+        $stmt1->execute([$departureAirportId, $arrivalAirportId, $departureDate]);
+        $outboundFlights = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
+        // جلب رحلات العودة
+        $stmt2 = $this->db->prepare("
+            SELECT f.*, fr.departure_airport, fr.arrival_airport,
+                   da.airport_name AS departure_airport_name,
+                   aa.airport_name AS arrival_airport_name
+            FROM Flight f
+            INNER JOIN FlightRoute fr ON f.flight_number = fr.flight_number
+            INNER JOIN Airport da ON fr.departure_airport = da.iata_code
+            INNER JOIN Airport aa ON fr.arrival_airport = aa.iata_code
+            WHERE fr.departure_airport = ? 
+              AND fr.arrival_airport = ? 
+              AND DATE(f.departure_time) = ?
+        ");
+        $stmt2->execute([$arrivalAirportId, $departureAirportId, $returnDate]);
+        $returnFlights = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
+        return [
+            'outbound' => $outboundFlights,
+            'return' => $returnFlights
+        ];
+    }
+
 }
 
 ?>
