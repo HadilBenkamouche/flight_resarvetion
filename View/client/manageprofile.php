@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 require_once '../../confi/db.php';
@@ -313,4 +314,5 @@ $client = $clientModel->getClientById($clientId);
     });
   </script>
 </body>
+
 </html>

@@ -1,3 +1,4 @@
+
 <?php
 // controller/dashboard.php
 
@@ -34,3 +35,4 @@ case 'pastbookings':
   include 'View/pastbookings.php';
   break;
 ?>
+

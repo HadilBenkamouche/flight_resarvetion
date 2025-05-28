@@ -1,3 +1,4 @@
+
 <?php
 // بدء الجلسة
 if (session_status() === PHP_SESSION_NONE) {
@@ -205,7 +206,8 @@ $reservations = $reservationModel->getReservationsByClientId($_SESSION['client_i
   </main>
 
   <div class="footer">
-    Nova Travels © 2025 — All rights reserved.
+    
   </div>
 </body>
 </html>
+
