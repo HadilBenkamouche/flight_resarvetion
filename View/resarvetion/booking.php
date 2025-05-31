@@ -1,4 +1,7 @@
 
+
+
+
 <?php
 // تأكد من بدء الجلسة بشكل آمن
 if (session_status() === PHP_SESSION_NONE) {
@@ -15,7 +18,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <style>
         :root {
             --cherry-red: #b22234;
-            --off-white: #fdf9f6;
+            --off-white:rgb(255, 255, 255);
         }
 
         body {
@@ -232,15 +235,13 @@ if (session_status() === PHP_SESSION_NONE) {
 <!-- Navbar -->
 <header>
     <nav class="navbar">
-        <img src="logo.png" alt="Logo" class="logo">
-        <div class="search-bar">
-            <input type="text" placeholder="Search...">
-        </div>
+       <img src="\flight_resarvetion\Logo.png" alt="Logo" class="logo">
+        
         <div class="nav-links">
-            <a href="index.html" class="nav-link">Home</a>
+             <a href="\flight_resarvetion\index.php">Home</a>
             <a href="index.html#booking" class="nav-link">Book a Flight</a>
             <a href="reservations.html" class="nav-link">Reservations</a>
-            <a href="login.php" class="nav-link">Log In</a>
+        
         </div>
         <div class="auth-buttons">
             <button class="login-btn">Login</button>

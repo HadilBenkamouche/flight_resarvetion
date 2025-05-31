@@ -173,7 +173,7 @@
 <!-- Navbar Section -->
 <header>
     <nav class="navbar">
-        <img src="../logo.png" alt="Logo" class="logo">
+       <img src="\flight_resarvetion\Logo.png" alt="Logo" class="logo">
         <div class="search-bar">
             <input type="text" placeholder="Search...">
         </div>

@@ -183,7 +183,7 @@
   <button type="submit" class="login-btn">Login</button>
 
   <div class="signup">
-    Need an account? <a href="#" class="signup-link">SIGN UP</a>
+    Need an account? <a href="signup.php" class="signup-link">SIGN UP</a>
   </div>
 </form>
 <img src="loginpage.png" alt="Bottom Image" class="bottom-left-img">

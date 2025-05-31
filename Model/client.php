@@ -8,11 +8,7 @@ class Client {
 
     // دالة التسجيل
     public function register($firstName, $lastName, $email, $password) {
-        // التحقق من أن كلمة المرور تحتوي على 8 شيفرات مختلطة
-        if (!$this->validatePassword($password)) {
-            // إذا كانت كلمة المرور غير صالحة، إعادة قيمة خاطئة
-            return false;
-        }
+        
     
         // تشفير كلمة المرور
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -65,6 +61,28 @@ class Client {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$firstName, $email, $hashedPassword, $clientId]);
     }
+
+
+
+// ✅ جلب جميع المستخدمين (باستثناء الأدمن)
+    public function getAllClients() {
+        $sql = "SELECT * FROM client WHERE role = 'client'";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // ✅ حذف مستخدم
+   public function deleteClientById($clientId) {
+    $stmt = $this->db->prepare("DELETE FROM Client WHERE client_id = ?");
+    return $stmt->execute([$clientId]);
+}
+
+   
+
+
+
+
 
 
 }

@@ -185,7 +185,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
   <!-- Replaced Navbar -->
   <div class="navbar">
-    <img src="your-logo.png" alt="Logo" class="logo">
+  <img src="\flight_resarvetion\Logo.png" alt="Logo" class="logo">
     <div class="search-bar">
       <input type="text" placeholder="Search">
     </div>

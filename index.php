@@ -129,11 +129,11 @@ $arrivalAirports = $airportModel->getArrivalAirports();
     }
 
     .hero-image {
-      margin-top: 80px;
+      margin-top: 60px;
       background-image: url('homebcg.jpg');
       background-size: cover;
       background-position: center;
-      height: 522px;
+      height: 533px;
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -212,13 +212,13 @@ $arrivalAirports = $airportModel->getArrivalAirports();
 
     .container {
       background: #ffffff;
-      padding: 40px;
-      margin: 60px auto;
-      border-radius: 25px;
-      box-shadow: 0 4px 35px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 900px;
-      animation: fadeIn 1s ease;
+  padding: 40px;
+  margin: 60px auto;
+  border-radius: 25px;
+  box-shadow: 0 4px 35px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 1000px;
+  animation: fadeIn 1s ease;
     }
 
     @keyframes fadeIn {
@@ -240,10 +240,10 @@ $arrivalAirports = $airportModel->getArrivalAirports();
     }
 
     .form-control {
-      flex: 1 1 200px;
+       flex: 1;
       display: flex;
       flex-direction: column;
-      position: relative;
+      gap: 4px; /* المسافة بين label و input/select */
       transition: transform 0.2s ease;
     }
 
@@ -259,10 +259,13 @@ $arrivalAirports = $airportModel->getArrivalAirports();
 
     .form-control input,
     .form-control select {
-      padding: 10px;
-      border: 2px solid #B22234;
-      border-radius: 8px;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      height: 48px;
+  padding: 10px;
+  border: 2px solid #B22234;
+  border-radius: 8px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+  font-size: 16px;
     }
 
     .form-control input:focus,
@@ -271,6 +274,29 @@ $arrivalAirports = $airportModel->getArrivalAirports();
       outline: none;
       box-shadow: 0 0 5px #7d010b66;
     }
+    .passenger-inputs {
+  display: flex;
+  gap: 15px;
+  flex-direction: row;
+}
+
+.passenger-inputs div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.passenger-inputs input {
+  width: 2cm;
+  height: 1cm;
+  padding: 2px;
+  font-size: 12px;
+  text-align: center;
+  border: 2px solid #B22234;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
     
     .search-button {
       display: block;
@@ -289,14 +315,28 @@ $arrivalAirports = $airportModel->getArrivalAirports();
       background-color: #7d010b;
       transform: scale(1.02);
     }
+    /* Responsive Design (اختياري للهاتف) */
+@media (max-width: 768px) {
+  .form-group.row {
+    flex-direction: column;
+  }
+
+  .form-control {
+    width: 100%;
+  }
+
+  .passenger-inputs {
+    flex-direction: column;
+  }
+}
 
     .floating-button {
       margin-top: 100px; /* قلل القيمة أو حتى حط 0 */
       position: fixed;
       bottom: 110px;
       left: 20px;
-      width: 78px;
-      height: 78px;
+      width: 85px;
+      height: 85px;
       z-index: 999;
       border-radius: 50%;
       overflow: hidden;
@@ -578,7 +618,7 @@ $arrivalAirports = $airportModel->getArrivalAirports();
 <div class="form-control">
     <label>From</label>
     <select name="from" required>
-        <option value="">Select Departure</option>
+        <option value="">Select Airport</option>
         <?php foreach ($departureAirports as $airport): ?>
             <option value="<?= htmlspecialchars($airport['iata_code']) ?>">
                 <?= htmlspecialchars($airport['city_name'] . " - " . $airport['airport_name']) ?>
@@ -591,7 +631,7 @@ $arrivalAirports = $airportModel->getArrivalAirports();
 <div class="form-control">
     <label>To</label>
     <select name="to" required>
-        <option value="">Select Arrival</option>
+        <option value="">Select Airport</option>
         <?php foreach ($arrivalAirports as $airport): ?>
             <option value="<?= htmlspecialchars($airport['iata_code']) ?>">
                 <?= htmlspecialchars($airport['city_name'] . " - " . $airport['airport_name']) ?>
@@ -601,39 +641,39 @@ $arrivalAirports = $airportModel->getArrivalAirports();
 </div>
 </div>
 
-    <div class="form-group">
-        <div class="form-control">
-            <label>Departure Date</label>
-            <input type="date" name="departure_date" required>
-        </div>
+       <div class="form-group row">
+      <div class="form-control">
+        <label>Departure Date</label>
+        <input type="date"name="departure_date" required>
+      </div>
 
-         <div class="form-control" id="return_date_container">
-  <label>Return Date</label>
-  <input type="date" name="return_date" id="return_date">
-</div>
+      <div class="form-control">
+        <label>Return Date</label>
+        <input type="date"name="return_date"id="return_date" >
+      </div>
 
-        
-        <div class="form-control">
-            <label>Passengers</label>
-            <div style="display: flex; gap: 10px; align-items: flex-end;">
-                <div style="display: flex; flex-direction: column;">
-                    <label style="font-size: 14px;">Adults</label>
-                    <input type="number" name="adults" min="1" max="10" value="1" style="width: 70px;">
-                </div>
-                <div style="display: flex; flex-direction: column;">
-                    <label style="font-size: 14px;">Children</label>
-                    <input type="number" name="children" min="0" max="10" value="0" style="width: 70px;">
-                </div>
-                <div style="display: flex; flex-direction: column;">
-                    <label style="font-size: 14px;">Infants</label>
-                    <input type="number" name="infants" min="0" max="10" value="0" style="width: 70px;">
-                </div>
-            </div>
+      <div class="form-control">
+        <label>Passengers</label>
+        <div class="passenger-inputs">
+          <div>
+            <label>Adults</label>
+            <input type="number" min="1" max="10" value="1">
+          </div>
+          <div>
+            <label>Children</label>
+            <input type="number" min="0" max="10" value="0">
+          </div>
+          <div>
+            <label>Infants</label>
+            <input type="number" min="0" max="10" value="0">
+          </div>
         </div>
+      </div>
     </div>
 
     <button type="submit" class="search-button">Search Flights</button>
-</form>
+  </form>
+</div>
 
 <script>
 function toggleReturnDate() {
@@ -796,9 +836,3 @@ document.addEventListener("DOMContentLoaded", function () {
   </section>
 </body>
 </html>
-
-
-
-
-
-

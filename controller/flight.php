@@ -1,4 +1,5 @@
 <?php
+
 require_once '../Model/flight.php';
 require_once '../confi/db.php'; // التأكد من الاتصال بقاعدة البيانات
 
@@ -103,10 +104,24 @@ if ($action == 'add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "فشل في إضافة الرحلة.";
     }
 
-// كونترولر جلب رحلات الذهاب والعودة
 
+  }
+ 
+ //delete flight...
+ 
+  if ($action == 'delete' && isset($_GET['flight_number'])) {
+    $flightNumber = $_GET['flight_number'];
+    $success = $flight->deleteFlight($flightNumber);
 
+    if ($success) {
+        header("Location: ../View/flights/manageflight.php?message=Flight+deleted+successfully");
+        exit();
+    } else {
+        header("Location: ../View/flights/manageflight.php?error=Failed+to+delete+flight");
+        exit();
+    }
 }
+
 
 ?>
 

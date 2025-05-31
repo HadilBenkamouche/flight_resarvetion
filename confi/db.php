@@ -9,7 +9,7 @@ try {
     $pdo = new PDO($dsn, $user, $pass);
     // Set PDO error mode to exception
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "✅ Connected to MySQL with PDO!";
+
 } catch (PDOException $e) {
     die("❌ Connection failed: " . $e->getMessage());
 }

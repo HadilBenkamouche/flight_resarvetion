@@ -126,7 +126,7 @@ $reservationNumber = $reservation['reservation_number'];
   <div class="navbar">
     <div class="logo">Nova Travels</div>
     <ul>
-      <li><a href="index.html">Home</a></li>
+     <a href="\flight_resarvetion\index.php">Home</a>
       <li><a href="booking.html">Book a Flight</a></li>
       <li><a href="reservations.html">Reservations</a></li>
       <li><a href="login.html">Log in</a></li>

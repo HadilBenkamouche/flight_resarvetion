@@ -182,7 +182,8 @@ public function getPassengersByReservation($reservationNumber) {
         $stmt->execute([':client_id' => $client_id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
- public function getReservationsByClientId($clientId) {
+ 
+    public function getReservationsByClientId($clientId) {
     $stmt = $this->pdo->prepare("
         SELECT 
             r.reservation_number,
@@ -227,7 +228,78 @@ public function getPassengersByReservation($reservationNumber) {
  }
 
 
+//admin part 
 
+
+  public function getAllReservations() {
+        $sql = "SELECT 
+                    r.reservation_number, 
+                    CONCAT(c.first_name, ' ', c.last_name) AS customer_name, 
+                    f.flight_number,
+                    r.reservation_date,
+                    f.departure_time,
+                    r.status
+                FROM reservation r
+                JOIN client c ON r.client_id = c.client_id
+                JOIN flight f ON r.flight_number = f.flight_number
+                ORDER BY r.reservation_date DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+   public function updateReservation($reservationNumber, $data) {
+        $sql = "UPDATE reservation SET status = :status, class_name = :class_name, total_price = :total_price
+                WHERE reservation_number = :reservation_number";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            ':status' => $data['status'],
+            ':class_name' => $data['class_name'],
+            ':total_price' => $data['total_price'],
+            ':reservation_number' => $reservationNumber
+        ]);
+    }
+
+// جلب حجز معين بواسطة رقم الحجز
+    public function getReservationById($reservationNumber) {
+        $sql = "SELECT * FROM reservation WHERE reservation_number = :reservation_number";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':reservation_number' => $reservationNumber]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
+
+    // تحديث بعض الحقول في الحجز، مع تحديث وقت الانطلاق في الرحلة المرتبطة (إن وجد)
+    public function updateReservationFields($reservationNumber, $status, $departureTime) {
+        $sql1 = "UPDATE reservation SET status = :status WHERE reservation_number = :reservation_number";
+        $stmt1 = $this->pdo->prepare($sql1);
+        $result1 = $stmt1->execute([
+            ':status' => $status,
+            ':reservation_number' => $reservationNumber
+        ]);
+
+        // تحديث وقت الانطلاق في جدول الرحلات المرتبطة بالحجز
+        $sql2 = "UPDATE flight SET departure_time = :departure_time WHERE flight_number = (
+                    SELECT flight_number FROM reservation WHERE reservation_number = :reservation_number
+                )";
+        $stmt2 = $this->pdo->prepare($sql2);
+        $result2 = $stmt2->execute([
+            ':departure_time' => $departureTime,
+            ':reservation_number' => $reservationNumber
+        ]);
+
+        return $result1 && $result2;
+    }
+
+// حذف حجز معين بواسطة رقم الحجز
+    public function deleteReservation($reservationNumber) {
+        $sql = "DELETE FROM reservation WHERE reservation_number = :reservation_number";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([':reservation_number' => $reservationNumber]);
+    }
 
 }
 

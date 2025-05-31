@@ -171,7 +171,7 @@ $cities = $model->getAllCities();
 <body>
 
   <div class="navbar">
-    <img src="your-logo.png" alt="Logo" class="logo">
+    <img src="\flight_resarvetion\Logo.png" alt="Logo" class="logo">
     <button class="logout-btn">Logout</button>
   </div>
 

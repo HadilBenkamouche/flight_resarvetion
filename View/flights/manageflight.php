@@ -1,9 +1,5 @@
 
-   <?php if (isset($_GET['deleted']) && $_GET['deleted'] == 1): ?>
-    <div class="alert alert-success">تم حذف الرحلة بنجاح.</div>
-<?php elseif (isset($_GET['error']) && $_GET['error'] == 'delete_failed'): ?>
-    <div class="alert alert-danger">فشل في حذف الرحلة.</div>
-<?php endif; ?>
+   
 
    <?php
 require_once '../../confi/db.php'; // تأكدي من صحة المسار
@@ -154,7 +150,7 @@ $flights = $flightModel->getAllFlights();
 <body>
 
   <div class="navbar">
-    <img src="your-logo.png" alt="Logo" class="logo" />
+   <img src="\flight_resarvetion\Logo.png" alt="Logo" class="logo">
     <button class="logout-btn">Logout</button>
   </div>
 
@@ -182,8 +178,13 @@ $flights = $flightModel->getAllFlights();
               <td><?= htmlspecialchars($flight['departure_time']) ?></td>
               <td><?= htmlspecialchars($flight['arrival_time']) ?></td>
               <td>
-              <a class="action-btn edit-btn" href="editflight.php?flight_number=<?= $flight['flight_number'] ?>">Edit</a>
-              <a class="action-btn delete-btn" href="deleteflight.php?flight_number=<?= $flight['flight_number'] ?>" onclick="return confirm('Are you sure you want to delete this flight?')">Delete</a>
+              
+              <a class="action-btn delete-btn"
+   href="\flight_resarvetion\controller\flight.php?action=delete&flight_number=<?= $flight['flight_number'] ?>"
+   onclick="return confirm('Are you sure you want to delete this flight?')">
+   Delete
+</a>
+
 
               </td>
             </tr>

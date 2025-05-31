@@ -215,7 +215,7 @@
               <p>To: <?= htmlspecialchars($flight['arrival_airport_name']) ?></p>
               <p>Departure: <?= htmlspecialchars($flight['departure_time']) ?></p>
               <p>Arrival: <?= htmlspecialchars($flight['arrival_time']) ?></p>
-              <a href="#" class="btn-details">View Details</a>
+              <a href="flight.php?action=details&flight_number=<?php echo urlencode($flight['flight_number']); ?>" class="btn-details">View Details</a>
             </div>
           <?php endforeach; ?>
         <?php endif; ?>
@@ -236,7 +236,7 @@
               <p>To: <?= htmlspecialchars($flight['arrival_airport_name']) ?></p>
               <p>Departure: <?= htmlspecialchars($flight['departure_time']) ?></p>
               <p>Arrival: <?= htmlspecialchars($flight['arrival_time']) ?></p>
-              <a href="#" class="btn-details">View Details</a>
+         <a href="flight.php?action=details&flight_number=<?php echo urlencode($flight['flight_number']); ?>" class="btn-details">View Details</a>
             </div>
           <?php endforeach; ?>
         <?php endif; ?>

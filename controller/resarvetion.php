@@ -175,13 +175,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     }
 
 
+      
+    
+    //all resevations
+        
+    
+    
 
+    
+    
 
+    // تعديل بيانات الحجز بشكل عام
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action']) && $_POST['action'] === 'update') {
+        // Sanitize and validate input
+        $reservationNumber = $_POST['reservation_number'] ?? null;
+        $flightNumber = $_POST['flight_number'] ?? null;
+        $status = $_POST['status'] ?? null;
+        $className = $_POST['class'] ?? null;
 
+        if (!$reservationNumber || !$status || !$className || !$flightNumber) {
+            die("❌ All fields are required.");
+        }
 
+        // Initialize model
+        $reservationModel = new Reservation($pdo);
 
+        // Update reservation
+        $success = $reservationModel->updateReservation($reservationNumber, $status, $className);
 
+        if ($success) {
+            echo "<script>alert('✅ Reservation updated successfully.'); window.location.href = '../View/reservation/list.php';</script>";
+        } else {
+            echo "<script>alert('❌ Failed to update reservation.'); history.back();</script>";
+        }
+    } else {
+        die("❌ Invalid form action.");
+    }
+} else {
+    die("❌ Invalid request method.");
+}
+    
 
+    // حذف الحجز
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reservation_number'])) {
+            $reservationNumber = $_POST['reservation_number'];
+
+            $success = $this->reservationModel->deleteReservation($reservationNumber);
+            if ($success) {
+                header("Location: reservations.php?message=تم حذف الحجز بنجاح");
+                exit;
+            } else {
+                die("فشل حذف الحجز");
+            }
+        } else {
+            die("رقم الحجز غير محدد");
+        }
+    
+    
 
 
 } // ← ✅ إغلاق القوس المفقود
