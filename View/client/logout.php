@@ -68,7 +68,7 @@
   <div class="message-box">
     <h1>You’ve been logged out</h1>
     <p>Thank you for using Nova Travel. We hope to see you again soon!</p>
-    <a href="login.php" class="btn">Back To Home</a>
+    <a href="\flight_resarvetion\index.php" class="btn">Back To Home</a>
   </div>
 
 </body>

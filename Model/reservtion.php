@@ -250,17 +250,18 @@ public function getPassengersByReservation($reservationNumber) {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-   public function updateReservation($reservationNumber, $data) {
-        $sql = "UPDATE reservation SET status = :status, class_name = :class_name, total_price = :total_price
-                WHERE reservation_number = :reservation_number";
-        $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([
-            ':status' => $data['status'],
-            ':class_name' => $data['class_name'],
-            ':total_price' => $data['total_price'],
-            ':reservation_number' => $reservationNumber
-        ]);
-    }
+   public function updateReservation($reservationNumber, $status, $className) {
+    $sql = "UPDATE reservation SET status = :status, class_name = :class_name
+            WHERE reservation_number = :reservation_number";
+    $stmt = $this->pdo->prepare($sql);
+    return $stmt->execute([
+        ':status' => $status,
+        ':class_name' => $className,
+    
+        ':reservation_number' => $reservationNumber
+    ]);
+}
+
 
 // جلب حجز معين بواسطة رقم الحجز
     public function getReservationById($reservationNumber) {

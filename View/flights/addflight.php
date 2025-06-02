@@ -139,7 +139,18 @@ $cities = $model->getAllCities();
       justify-content: space-between;
       margin-top: 20px;
     }
-
+.logout-button {
+      background-color: #B22234;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+       margin-right: 40px; 
+    }
     .btn {
       padding: 12px 24px;
       border: none;
@@ -172,7 +183,7 @@ $cities = $model->getAllCities();
 
   <div class="navbar">
     <img src="\flight_resarvetion\Logo.png" alt="Logo" class="logo">
-    <button class="logout-btn">Logout</button>
+<button class="logout-button" onclick="location.href='/flight_resarvetion/controller/logoutController.php'">Log Out</button>
   </div>
 
  <main>

@@ -28,44 +28,46 @@ $flights = $flightModel->getAllFlights();
     }
 
     .navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 40px;
-      background-color: #ffffff;
-      height: 80px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  background-color: white;
+  height: 80px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
 
-    .logo {
-      padding-top: 15px;
-      width: 170px;
-      height: auto;
-    }
+.logo {
+  padding-top: 15px;
+  width: 170px;
+  height: auto;
+}
 
-    .logout-btn {
-      background-color: #B22234;
-      color: #ffffff;
-      border: none;
-      border-radius: 25px;
-      padding: 10px 20px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
 
-    .logout-btn:hover {
-      background-color: #7d010b;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+.nav-link {
+  text-decoration: none;
+  color: #b22234;
+  font-weight: bold;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
 
-    main {
+.nav-link:hover {
+  color: #7d010b;
+}
+
+    
+main {
       padding: 120px 40px 40px;
     }
 
@@ -151,8 +153,11 @@ $flights = $flightModel->getAllFlights();
 
   <div class="navbar">
    <img src="\flight_resarvetion\Logo.png" alt="Logo" class="logo">
-    <button class="logout-btn">Logout</button>
-  </div>
+ 
+  <a href="\flight_resarvetion\View\client\adminprofile.php" class="nav-link">Profile</a>
+  <a href="\flight_resarvetion\controller\logoutController.php" class="nav-link">Logout</a>
+</div>
+
 
   <main>
     <h1>Manage Flights</h1>
@@ -184,7 +189,6 @@ $flights = $flightModel->getAllFlights();
    onclick="return confirm('Are you sure you want to delete this flight?')">
    Delete
 </a>
-
 
               </td>
             </tr>

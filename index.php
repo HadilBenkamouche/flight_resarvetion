@@ -541,6 +541,8 @@ $arrivalAirports = $airportModel->getArrivalAirports();
   transform: scale(1.1);
 }
 
+
+  
   </style>
 </head>
 <body>

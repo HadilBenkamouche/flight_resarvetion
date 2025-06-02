@@ -225,8 +225,9 @@ unset($_SESSION['message'])
   <div class="navbar">
     <img src="\flight_resarvetion\Logo.png" alt="Logo" class="logo">
     <div class="nav-links">
-    
-      <a href="#" class="nav-link">Logout</a>
+     <a href="\flight_resarvetion\View\client\adminprofile.php" class="nav-link">Profile</a>
+      <a href="\flight_resarvetion\controller\logoutController.php" class="nav-link">Logout</a>
+ 
     </div>
   </div>
 

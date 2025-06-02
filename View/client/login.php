@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,11 +12,11 @@
     }
 
     .container {
-      width: 449px;
+      width: 440px;
       background-color: rgb(255, 255, 255);
       border-radius: 30px;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-      margin: 2px auto;
+      margin: 30px auto;
       padding: 30px 20px 20px 20px;
       text-align: center;
       position: relative;
@@ -151,12 +150,14 @@
 
     .bottom-left-img {
   position: absolute;
-  bottom: 20px;
-  left: 5px;
+  bottom: -35px;
+  left: -6px;
   width: 500px;
   height: auto;
   z-index: 0;
   pointer-events: none;
+  
+  
 }
 
 
@@ -183,7 +184,7 @@
   <button type="submit" class="login-btn">Login</button>
 
   <div class="signup">
-    Need an account? <a href="signup.php" class="signup-link">SIGN UP</a>
+    Need an account? <a href="http://localhost/flight_resarvetion/View/client/signup.php" class="signup-link">SIGN UP</a>
   </div>
 </form>
 <img src="loginpage.png" alt="Bottom Image" class="bottom-left-img">

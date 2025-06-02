@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,11 +12,11 @@
     }
 
     .container {
-      width: 449px;
+      width: 440px;
       background-color: rgb(255, 255, 255);
       border-radius: 30px;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-      margin: 2px auto;
+      margin: 30px auto;
       padding: 30px 20px 20px 20px;
       text-align: center;
       position: relative;
@@ -125,16 +124,15 @@
       text-decoration: underline;
     }
 
-    
     .bottom-left-img {
-  position: absolute;
-  bottom: 20px;
-  left: 0px;
-  width: 500px;
-  height: auto;
-  z-index: 0;
-  pointer-events: none;
-}
+      position: absolute;
+      bottom:-35px;
+      left: -6px;
+      width: 500px;
+      height: auto;
+      z-index: 0;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -143,8 +141,9 @@
   <img src="Logo.png" alt="Logo" class="logo">
 
   <form action="../../controller/client.php" method="POST" class="form">
-  <input type="hidden" name="action" value="signup">
-  <div class="input-container">
+    <input type="hidden" name="action" value="signup">
+
+    <div class="input-container">
       <input type="text" name="username" required />
       <label>Username</label>
     </div>
@@ -164,13 +163,10 @@
     <div class="login">
       Already have an account? <a href="login.php" class="login-link">LOGIN</a>
     </div>
-    </form>
-    
-  </div>
-  <img src="loginpage.png" alt="Bottom Image" class="bottom-left-img">
+  </form>
 
-    
-  </div>
-  
+  <img src="loginpage.png" alt="Bottom Image" class="bottom-left-img">
+</div>
+
 </body>
 </html>

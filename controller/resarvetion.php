@@ -206,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $success = $reservationModel->updateReservation($reservationNumber, $status, $className);
 
         if ($success) {
-            echo "<script>alert('✅ Reservation updated successfully.'); window.location.href = '../View/reservation/list.php';</script>";
+            echo "<script>alert('✅ Reservation updated successfully.'); window.location.href = '../View/resarvetion/managereservation.php';</script>";
         } else {
             echo "<script>alert('❌ Failed to update reservation.'); history.back();</script>";
         }

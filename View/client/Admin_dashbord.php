@@ -136,7 +136,7 @@
   <div class="navbar">
     <img src="logo.png" alt="Logo" class="Logo">
     <div class="nav-links">
-      <a href="#" class="nav-link">Logout</a>
+      <a href="\flight_resarvetion\controller\logoutController.php" class="nav-link">Logout</a>
     </div>
   </div>
 

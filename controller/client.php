@@ -21,9 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $lastName = isset($nameParts[1]) ? $nameParts[1] : '';
               $result = $client->register($firstName, $lastName, $email, $password);
             if ($result) {
-                echo "تم التسجيل بنجاح!";
+                echo '<script>window.location.href = "../View/client/signup_success.php";</script>';
             } else {
-                echo "فشل في التسجيل.";
+                 echo '<script>window.location.href = "../View/client/signup_notsuccess.php";</script>';
             }
         } else {
             echo "يرجى ملء جميع الحقول.";

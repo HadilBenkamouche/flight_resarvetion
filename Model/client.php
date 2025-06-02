@@ -80,6 +80,24 @@ class Client {
 
    
 
+public function emailExists($email, $excludeClientId = null) {
+    $sql = "SELECT COUNT(*) FROM client WHERE email = :email";
+
+    // إذا كنت تريد تجاهل مستخدم معين (مثلاً أثناء التعديل)
+    if ($excludeClientId !== null) {
+        $sql .= " AND id != :id";
+    }
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+
+    if ($excludeClientId !== null) {
+        $stmt->bindParam(':id', $excludeClientId, PDO::PARAM_INT);
+    }
+
+    $stmt->execute();
+    return $stmt->fetchColumn() > 0;
+}
 
 
 

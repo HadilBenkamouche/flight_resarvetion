@@ -24,7 +24,47 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['reserva
   <meta charset="UTF-8" />
   <title>Edit Reservation</title>
   <style>
-    body {
+   
+   .navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  background-color: white;
+  height: 80px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.logo {
+  padding-top: 15px;
+  width: 170px;
+  height: auto;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #b22234;
+  font-weight: bold;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #7d010b;
+}
+
+   body {
       font-family: Arial, sans-serif;
       padding: 40px;
       background-color: #f5f5f5;
@@ -60,10 +100,23 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['reserva
       border-radius: 8px;
       cursor: pointer;
     }
-  </style>
+ 
+ main {
+  margin-top: 120px; /* لإزاحة المحتوى أسفل الـ navbar */
+}
+
+ </style>
+
 </head>
 <body>
-
+<div class="navbar">
+  <img src="\flight_resarvetion\Logo.png" alt="Logo" class="logo">
+  <div class="nav-links">
+    <a href="\flight_resarvetion\View\client\adminprofile.php" class="nav-link">Profile</a>
+    <a href="\flight_resarvetion\controller\logoutController.php" class="nav-link">Logout</a>
+  </div>
+</div>
+<main>
   <h2>Edit Reservation #<?= htmlspecialchars($reservation['reservation_number']) ?></h2>
 
   <form method="POST" action="\flight_resarvetion\controller\resarvetion.php">
@@ -76,7 +129,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['reserva
     <label for="status">Status</label>
     <select name="status" id="status" required>
       <option value="Confirmed" <?= $reservation['STATUS'] === 'Confirmed' ? 'selected' : '' ?>>Confirmed</option>
-      <option value="Cancelled" <?= $reservation['STATUS'] === 'Cancelled' ? 'selected' : '' ?>>Cancelled</option>
+      <option value="Canceled" <?= $reservation['STATUS'] === 'Canceled' ? 'selected' : '' ?>>Canceled</option>
       <option value="Pending" <?= $reservation['STATUS'] === 'Pending' ? 'selected' : '' ?>>Pending</option>
     </select>
 
@@ -89,7 +142,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['reserva
 
     <button type="submit">Save Changes</button>
   </form>
-
+<main>
 </body>
 </html>
 
